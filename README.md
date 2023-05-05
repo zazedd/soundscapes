@@ -15,6 +15,7 @@ For a single page app (SPA) version of this template, check out [`vite-elm-spa`]
 
 ## Get Started
 # Enter the project, install dependencies, and get started!
+```
 cd soundscapes
 npm install
 npm run dev
