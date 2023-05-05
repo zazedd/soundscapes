@@ -9,7 +9,7 @@ import Login
 import Types exposing (..)
 import Url
 import Url.Parser exposing (s, top)
-import VitePluginHelper
+import Mood exposing (mood)
 
 
 main : Program () Model Msg
@@ -84,10 +84,8 @@ view model =
         [ case model.route of
             Home ->
                 div []
-                    [ img [ src <| VitePluginHelper.asset "/assets/logo.png", style "width" "300px" ] []
-                    , helloWorld model
-                    , div [] [ text "yo whatsup my niggas" ]
-                    ]
+                   [ mood model
+                ]
 
             Login ->
                 Login.login model
@@ -97,5 +95,4 @@ view model =
 
             NotFound ->
                 div [] [ text "Not Found!" ]
-        ]
     }
