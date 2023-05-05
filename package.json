@@ -1,8 +1,9 @@
 {
-  "name": "vite-elm-template",
-  "author": "Lindsay Wardell",
-  "description": "A default template for building Elm applications using Vite.",
-  "version": "1.8.0",
+  "name": "soundscapes",
+  "author1": "Leonardo Santos",
+  "author2": "Francisco Santos",
+  "description": "Create playlists based on your mood.",
+  "version": "0.1",
   "license": "MIT",
   "scripts": {
     "postinstall": "elm-tooling install",
