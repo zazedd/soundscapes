@@ -3,7 +3,6 @@ module Mood exposing (mood)
 import Exts.Html exposing (nbsp)
 import Html exposing (Html, a, div, h1, hr, img, input, label, p, source, span, text, video)
 import Html.Attributes exposing (autoplay, class, for, href, id, loop, src, step, style, type_)
-import Html.Events exposing (onClick)
 import Types exposing (Model, Msg)
 import VitePluginHelper
 

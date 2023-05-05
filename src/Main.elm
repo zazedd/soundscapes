@@ -1,15 +1,14 @@
-module Main exposing (main)
+module Main exposing (init, main)
 
 import Browser
 import Browser.Navigation as Nav
-import HelloWorld exposing (helloWorld)
 import Html exposing (div, img, text)
 import Html.Attributes exposing (src, style)
 import Login
+import Mood exposing (mood)
 import Types exposing (..)
 import Url
 import Url.Parser exposing (s, top)
-import Mood exposing (mood)
 
 
 main : Program () Model Msg
@@ -84,8 +83,7 @@ view model =
         [ case model.route of
             Home ->
                 div []
-                   [ mood model
-                ]
+                    [ mood model ]
 
             Login ->
                 Login.login model
@@ -95,4 +93,5 @@ view model =
 
             NotFound ->
                 div [] [ text "Not Found!" ]
+        ]
     }
