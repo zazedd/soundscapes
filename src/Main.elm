@@ -1,9 +1,9 @@
 module Main exposing (main)
 
 import Browser
-import HelloWorld exposing (helloWorld)
 import Html exposing (Html, div, img, text)
 import Html.Attributes exposing (src, style)
+import Mood exposing (mood)
 import Msg exposing (Msg(..))
 import VitePluginHelper
 
@@ -26,7 +26,5 @@ update msg model =
 view : Int -> Html Msg
 view model =
     div []
-        [ img [ src <| VitePluginHelper.asset "/assets/logo.png", style "width" "300px" ] []
-        , helloWorld model
-        , div [] [ text "yo whatsup my niggas" ]
+        [ mood model
         ]
