@@ -5,6 +5,7 @@ import Browser.Navigation as Nav
 import Html exposing (div, text)
 import Login exposing (submitLogin)
 import Mood exposing (mood)
+import Register exposing (submitRegister)
 import Types exposing (..)
 import Url exposing (Protocol(..))
 import Url.Parser exposing (s, top)
@@ -29,7 +30,8 @@ init flags url key =
       , key = key
       , route =
             Maybe.withDefault NotFoundRoute (Url.Parser.parse route url)
-      , login = { email = "", password = "" }
+      , login = initLogin ()
+      , register = initRegister ()
       , user = Nothing
       , token = flags
       }
@@ -115,6 +117,22 @@ update msg model =
         LoginSubmitHttp (Err _) ->
             ( model, Cmd.none )
 
+        RegisterUpdate r ->
+            ( { model | register = r }, Cmd.none )
+
+        RegisterSubmit ->
+            ( model, submitRegister model.register )
+
+        RegisterSubmitHttp (Ok _) ->
+            let
+                cmds =
+                    Nav.pushUrl model.key "/login"
+            in
+            ( model, cmds )
+
+        RegisterSubmitHttp (Err _) ->
+            ( model, Cmd.none )
+
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
@@ -145,7 +163,7 @@ view model =
                 Login.login model
 
             RegisterRoute ->
-                div [] [ text "register" ]
+                Register.register model
 
             NotFoundRoute ->
                 div [] [ text "Not Found!" ]

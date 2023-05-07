@@ -35,6 +35,28 @@ encodeLogin l =
             ]
 
 
+type alias Register =
+    { email : String
+    , username : String
+    , password : String
+    }
+
+
+initRegister : () -> Register
+initRegister () =
+    { email = "", password = "", username = "" }
+
+
+encodeRegister : Register -> Http.Body
+encodeRegister l =
+    Http.jsonBody <|
+        Json.Encode.object
+            [ ( "email", Json.Encode.string l.email )
+            , ( "username", Json.Encode.string l.username )
+            , ( "password", Json.Encode.string l.password )
+            ]
+
+
 type alias User =
     { id : String
     , email : String
@@ -63,6 +85,7 @@ type alias Model =
     , key : Nav.Key
     , url : Url.Url
     , login : Login
+    , register : Register
     , user : Maybe User
     , token : String
     }
@@ -76,3 +99,6 @@ type Msg
     | LoginSubmit
     | LoginSubmitHttp (Result Http.Error ( User, String ))
     | LoginUpdate Login
+    | RegisterUpdate Register
+    | RegisterSubmit
+    | RegisterSubmitHttp (Result Http.Error Json.Decode.Value)
