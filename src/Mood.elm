@@ -3,12 +3,11 @@ module Mood exposing (mood)
 import Exts.Html exposing (nbsp)
 import Html exposing (Html, a, div, h1, hr, img, input, label, p, source, span, text, video)
 import Html.Attributes exposing (autoplay, class, for, href, id, loop, src, step, style, type_)
-import Html.Events exposing (onClick)
-import Msg exposing (Msg(..))
+import Types exposing (Model, Msg)
 import VitePluginHelper
 
 
-mood : Int -> Html Msg
+mood : Model -> Html Msg
 mood model =
     div []
         [ video [ autoplay True, loop True, id "bg-video" ] [ source [ src "/assets/waves.mp4", type_ "video/mp4" ] [] ]
