@@ -79,6 +79,17 @@ decodeUser =
         (Json.Decode.field "id" Json.Decode.string)
 
 
+type alias DivVisibility =
+    { visible1 : Bool
+    , visible2 : Bool
+    }
+
+
+visibleController : () -> DivVisibility
+visibleController () =
+    { visible1 = True, visible2 = False }
+
+
 type alias Model =
     { counter : Int
     , route : Route
@@ -88,13 +99,12 @@ type alias Model =
     , register : Register
     , user : Maybe User
     , token : String
+    , divvis : DivVisibility
     }
 
 
 type Msg
-    = Increment
-    | Decrement
-    | LinkCliecked Browser.UrlRequest
+    = LinkCliecked Browser.UrlRequest
     | UrlChanged Url.Url
     | LoginSubmit
     | LoginSubmitHttp (Result Http.Error ( User, String ))
@@ -102,3 +112,4 @@ type Msg
     | RegisterUpdate Register
     | RegisterSubmit
     | RegisterSubmitHttp (Result Http.Error Json.Decode.Value)
+    | ToggleDiv

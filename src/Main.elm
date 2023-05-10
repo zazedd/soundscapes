@@ -34,6 +34,7 @@ init flags url key =
       , register = initRegister ()
       , user = Nothing
       , token = flags
+      , divvis = visibleController ()
       }
     , Cmd.none
     )
@@ -57,12 +58,6 @@ port getStorage : (String -> msg) -> Sub msg
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Increment ->
-            ( { model | counter = model.counter + 1 }, Cmd.none )
-
-        Decrement ->
-            ( { model | counter = model.counter - 1 }, Cmd.none )
-
         LinkCliecked urlRequest ->
             case urlRequest of
                 Browser.Internal url ->
@@ -132,6 +127,9 @@ update msg model =
 
         RegisterSubmitHttp (Err _) ->
             ( model, Cmd.none )
+
+        ToggleDiv ->
+            ( { model | divvis = { visible1 = not model.divvis.visible1, visible2 = not model.divvis.visible2 } }, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
