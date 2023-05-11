@@ -10,7 +10,11 @@ import Types exposing (Model, Msg(..), Register, encodeRegister)
 
 submitRegister : Register -> Cmd.Cmd Msg
 submitRegister r =
-    Http.send RegisterSubmitHttp (Http.post "http://localhost:3000/register" (encodeRegister r) Json.Decode.value)
+    Http.post
+        { url = "http://localhost:3000/register"
+        , body = encodeRegister r
+        , expect = Http.expectJson RegisterSubmitHttp Json.Decode.value
+        }
 
 
 register : Model -> Html Msg
