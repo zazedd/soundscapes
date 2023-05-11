@@ -2,7 +2,7 @@ module Common exposing (sidebar)
 
 import Html exposing (Html, a, div, hr, img, span, text)
 import Html.Attributes exposing (class, href, id, src, style)
-import Types exposing (Msg)
+import Types exposing (Model, Msg)
 import VitePluginHelper
 
 
@@ -11,8 +11,41 @@ nbsp =
     Char.fromCode 0xA0 |> String.fromChar
 
 
-sidebar : Html Msg
-sidebar =
+user_login : Model -> Html Msg
+user_login model =
+    case model.user of
+        Just user ->
+            let
+                uname =
+                    user.id
+            in
+            div []
+                [ div [ class "sidebar-user-pic" ]
+                    [ img [ src <| VitePluginHelper.asset "/assets/loggedin.png", style "width" "43px", style "height" "43px" ] []
+                    , span [ class "sidebar-option-text", style "margin-left" "15px" ] [ text ("Hi " ++ uname ++ "!") ]
+                    ]
+                , div [ class "sidebar-user", style "left" "30px" ]
+                    [ span [ id "sidebar-option-text2" ]
+                        [ span [ class "material-symbols-outlined", style "font-size" "17px" ]
+                            [ text "arrow_forward_ios" ]
+                        ]
+                    , a [ href "/logout" ] [ span [ class "sidebar-option-text" ] [ span [ id "sidebar-option-text2" ] [ text (nbsp ++ nbsp ++ nbsp ++ nbsp ++ nbsp ++ nbsp ++ "Log Out") ] ] ]
+                    ]
+                ]
+
+        _ ->
+            div []
+                [ img [ class "sidebar-user-pic", src <| VitePluginHelper.asset "/assets/loggedout.png", style "width" "45px", style "height" "45px" ] []
+                , div [ class "sidebar-user" ]
+                    [ a [ href "/login " ] [ span [ id "sidebar-option-text2" ] [ text "Login" ] ]
+                    , span [ class "sidebar-option-text" ] [ text (nbsp ++ nbsp ++ "/" ++ nbsp ++ nbsp) ]
+                    , a [ href "/register" ] [ span [ class "sidebar-option-text" ] [ span [ id "sidebar-option-text2" ] [ text "Register" ] ] ]
+                    ]
+                ]
+
+
+sidebar : Model -> Html Msg
+sidebar model =
     div [ class "sidebar" ]
         [ div [ class "logo" ]
             [ img [ src <| VitePluginHelper.asset "/assets/logo.png", style "width" "54px", style "height" "39.94px" ] []
@@ -60,5 +93,5 @@ sidebar =
                     ]
                 ]
             ]
-        , div [ class "sidebar-user" ] [ text "Login" ]
+        , user_login model
         ]

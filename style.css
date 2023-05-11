@@ -96,7 +96,31 @@
 	opacity: 1;
 }
 
+.sidebar-user-pic {
+  position: absolute;
+  bottom: 60px;
+  left: 16px;
+  white-space: nowrap;
+}
+
+.sidebar-user {
+  position: absolute;
+  bottom: 20px;
+  left: 17px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.sidebar-user a {
+  color: white;
+  text-decoration: none;
+}
+
 .sidebar-options #sidebar-option-text2:hover {
+  color: #72afb4;
+}
+
+.sidebar-user #sidebar-option-text2:hover {
   color: #72afb4;
 }
 
@@ -283,7 +307,7 @@ input[type=range]:focus::-ms-fill-upper {
 
 
 @media screen and (min-width: 720px) and (max-width: 1920px) {
-  .dashboard {
+  .sidebar {
     width: 4%;
   }
 

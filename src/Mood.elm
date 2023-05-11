@@ -1,8 +1,8 @@
 module Mood exposing (mood)
 
 import Common exposing (sidebar)
-import Html exposing (Html, a, button, div, h1, hr, img, input, label, option, p, select, source, span, text, video)
-import Html.Attributes exposing (autoplay, class, classList, disabled, for, href, id, loop, selected, src, step, style, type_, value)
+import Html exposing (Html, button, div, h1, input, label, option, p, select, source, span, text, video)
+import Html.Attributes exposing (autoplay, class, classList, disabled, for, id, loop, selected, src, step, type_, value)
 import Html.Attributes.Aria exposing (ariaLabel)
 import Html.Events exposing (onClick)
 import Types exposing (Model, Msg)
@@ -12,7 +12,7 @@ mood : Model -> Html Msg
 mood model =
     div []
         [ video [ autoplay True, loop True, id "bg-video" ] [ source [ src "/assets/waves.mp4", type_ "video/mp4" ] [] ]
-        , sidebar
+        , sidebar model
         , div [ class "main-content" ]
             [ h1 [ id "title" ] [ text "soundscapes" ]
             , div [ class "center-content" ]
