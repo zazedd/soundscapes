@@ -5,15 +5,6 @@
 	font-family: "Nanum Gothic", sans-serif;
 }
 
-@media screen and (min-width: 1920px) and (max-width: 2560px) {
-  .dashboard {
-    width: 6%;
-  }
-  .buttons {
-    margin-bottom: -100px;
-  }
-}
-
 #bg-video {
 	position: fixed;
 	top: 0;
@@ -142,21 +133,17 @@
 
 .range-div,
 .select-div {
-  left: inherit;
-  right: inherit;
-  top: inherit;
-  bottom: inherit;
-  margin: inherit;
-  width: inherit;
-  height: inherit;
-  position: absolute;
+  transition: opacity 0.5s ease-in-out;
   opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+  height: 0;
+  overflow: hidden;
 }
 
 .range-div.visible,
 .select-div.visible {
   opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+  height: auto;
 }
 
 .range-div {
@@ -193,7 +180,7 @@
 
 .buttons {
   margin-bottom: auto;
-  margin-top: -300px;
+  margin-top: -500px;
 }
 
 input[type=range] {
@@ -293,5 +280,17 @@ input[type=range]:focus::-ms-fill-upper {
   input[type=range] {
     margin: 0;
   }
+}
+
+
+@media screen and (min-width: 720px) and (max-width: 1920px) {
+  .dashboard {
+    width: 4%;
+  }
+
+  .buttons {
+     margin-top: -300px;
+  }
+
 }
 

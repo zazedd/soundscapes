@@ -8,6 +8,11 @@ import Types exposing (Model, Msg)
 import VitePluginHelper
 
 
+nbsp : String
+nbsp =
+    Char.fromCode 0xA0 |> String.fromChar
+
+
 mood : Model -> Html Msg
 mood model =
     div []
@@ -22,7 +27,9 @@ mood model =
                 [ a [ href "#" ]
                     [ span [ class "material-symbols-outlined" ] [ text "emoticon" ]
                     , span [ class "dashboard-option-text" ]
-                        [ text "/"
+                        [ text (nbsp ++ nbsp ++ nbsp)
+                        , text "/"
+                        , text (nbsp ++ nbsp ++ nbsp)
                         , span [ id "dashboard-option-text2" ] [ text "mood based" ]
                         ]
                     ]
@@ -30,7 +37,9 @@ mood model =
                     [ span [ class "material-symbols-outlined" ]
                         [ text "music_note" ]
                     , span [ class "dashboard-option-text" ]
-                        [ text "/"
+                        [ text (nbsp ++ nbsp ++ nbsp)
+                        , text "/"
+                        , text (nbsp ++ nbsp ++ nbsp)
                         , span [ id "dashboard-option-text2" ] [ text "song based" ]
                         ]
                     ]
@@ -38,7 +47,9 @@ mood model =
                     [ span [ class "material-symbols-outlined" ]
                         [ text "calendar_month" ]
                     , span [ class "dashboard-option-text" ]
-                        [ text "/"
+                        [ text (nbsp ++ nbsp ++ nbsp)
+                        , text "/"
+                        , text (nbsp ++ nbsp ++ nbsp)
                         , span [ id "dashboard-option-text2" ] [ text "year based" ]
                         ]
                     ]
@@ -46,8 +57,10 @@ mood model =
                     [ span [ class "material-symbols-outlined" ]
                         [ text "dashboard" ]
                     , span [ class "dashboard-option-text" ]
-                        [ text "/"
-                        , span [ id "dashboard-option-text2" ] [ text "dashboard based" ]
+                        [ text (nbsp ++ nbsp ++ nbsp)
+                        , text "/"
+                        , text (nbsp ++ nbsp ++ nbsp)
+                        , span [ id "dashboard-option-text2" ] [ text "dashboard" ]
                         ]
                     ]
                 ]
