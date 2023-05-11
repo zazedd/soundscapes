@@ -13,8 +13,8 @@
 
 For a single page app (SPA) version of this template, check out [`vite-elm-spa`](https://github.com/lindsaykwardell/vite-elm-spa)
 
-## Get Started
-# Running it
+# Get Started
+## Running it
 ```
 cd soundscapes
 npm install
