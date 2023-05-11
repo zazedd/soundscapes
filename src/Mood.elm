@@ -1,6 +1,5 @@
 module Mood exposing (mood)
 
-import Exts.Html exposing (nbsp)
 import Html exposing (Html, a, button, div, h1, hr, img, input, label, option, p, select, source, span, text, video)
 import Html.Attributes exposing (autoplay, class, classList, disabled, for, href, id, loop, selected, src, step, style, type_, value)
 import Html.Attributes.Aria exposing (ariaLabel)
@@ -23,9 +22,7 @@ mood model =
                 [ a [ href "#" ]
                     [ span [ class "material-symbols-outlined" ] [ text "emoticon" ]
                     , span [ class "dashboard-option-text" ]
-                        [ text (nbsp ++ nbsp ++ nbsp)
-                        , text "/"
-                        , text (nbsp ++ nbsp ++ nbsp)
+                        [ text "/"
                         , span [ id "dashboard-option-text2" ] [ text "mood based" ]
                         ]
                     ]
@@ -33,9 +30,7 @@ mood model =
                     [ span [ class "material-symbols-outlined" ]
                         [ text "music_note" ]
                     , span [ class "dashboard-option-text" ]
-                        [ text (nbsp ++ nbsp ++ nbsp)
-                        , text "/"
-                        , text (nbsp ++ nbsp ++ nbsp)
+                        [ text "/"
                         , span [ id "dashboard-option-text2" ] [ text "song based" ]
                         ]
                     ]
@@ -43,9 +38,7 @@ mood model =
                     [ span [ class "material-symbols-outlined" ]
                         [ text "calendar_month" ]
                     , span [ class "dashboard-option-text" ]
-                        [ text (nbsp ++ nbsp ++ nbsp)
-                        , text "/"
-                        , text (nbsp ++ nbsp ++ nbsp)
+                        [ text "/"
                         , span [ id "dashboard-option-text2" ] [ text "year based" ]
                         ]
                     ]
@@ -53,9 +46,7 @@ mood model =
                     [ span [ class "material-symbols-outlined" ]
                         [ text "dashboard" ]
                     , span [ class "dashboard-option-text" ]
-                        [ text (nbsp ++ nbsp ++ nbsp)
-                        , text "/"
-                        , text (nbsp ++ nbsp ++ nbsp)
+                        [ text "/"
                         , span [ id "dashboard-option-text2" ] [ text "dashboard based" ]
                         ]
                     ]

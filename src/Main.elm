@@ -103,11 +103,11 @@ update msg model =
         LoginSubmitHttp (Ok ( user, token )) ->
             let
                 cmds =
-                    [ setStorage (Debug.log token token), Nav.pushUrl model.key "/" ]
+                    [ setStorage token, Nav.pushUrl model.key "/" ]
             in
             -- Debug.log
             --     token
-            ( { model | login = initLogin (), user = Just user }, Cmd.batch cmds )
+            ( { model | login = initLogin (), user = Just user, token = token }, Cmd.batch cmds )
 
         LoginSubmitHttp (Err _) ->
             ( model, Cmd.none )
