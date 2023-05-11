@@ -5,6 +5,15 @@
 	font-family: "Nanum Gothic", sans-serif;
 }
 
+@media screen and (min-width: 1920px) and (max-width: 2560px) {
+  .dashboard {
+    width: 6%;
+  }
+  .buttons {
+    margin-bottom: -100px;
+  }
+}
+
 #bg-video {
 	position: fixed;
 	top: 0;
@@ -128,14 +137,34 @@
   width: 25%;
   color: #fff;
   text-align: center;
-  margin-top: auto;
-  margin-bottom: 0;
-  transition: opacity 0.5s ease-in-out;
-  opacity: 0;
+  margin: auto;
 }
 
-.center-content.visible {
+.range-div,
+.select-div {
+  left: inherit;
+  right: inherit;
+  top: inherit;
+  bottom: inherit;
+  margin: inherit;
+  width: inherit;
+  height: inherit;
+  position: absolute;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.range-div.visible,
+.select-div.visible {
   opacity: 1;
+}
+
+.range-div {
+  z-index: -1;
+}
+
+.select-div {
+  z-index: 2;
 }
 
 .range {
@@ -164,6 +193,7 @@
 
 .buttons {
   margin-bottom: auto;
+  margin-top: -300px;
 }
 
 input[type=range] {
