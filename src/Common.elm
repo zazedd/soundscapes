@@ -13,52 +13,52 @@ nbsp =
 
 sidebar : Html Msg
 sidebar =
-    div [ class "dashboard" ]
+    div [ class "sidebar" ]
         [ div [ class "logo" ]
             [ img [ src <| VitePluginHelper.asset "/assets/logo.png", style "width" "54px", style "height" "39.94px" ] []
-            , span [ class "dashboard-option-text" ] [ text "soundscapes" ]
+            , span [ class "sidebar-option-text" ] [ text "soundscapes" ]
             ]
         , hr [ class "divider" ] []
-        , div [ class "dashboard-options" ]
+        , div [ class "sidebar-options" ]
             [ a [ href "#" ]
                 [ span [ class "material-symbols-outlined" ] [ text "emoticon" ]
-                , span [ class "dashboard-option-text" ]
+                , span [ class "sidebar-option-text" ]
                     [ text (nbsp ++ nbsp ++ nbsp)
                     , text "/"
                     , text (nbsp ++ nbsp ++ nbsp)
-                    , span [ id "dashboard-option-text2" ] [ text "mood based" ]
+                    , span [ id "sidebar-option-text2" ] [ text "mood based" ]
                     ]
                 ]
             , a [ href "#" ]
                 [ span [ class "material-symbols-outlined" ]
                     [ text "music_note" ]
-                , span [ class "dashboard-option-text" ]
+                , span [ class "sidebar-option-text" ]
                     [ text (nbsp ++ nbsp ++ nbsp)
                     , text "/"
                     , text (nbsp ++ nbsp ++ nbsp)
-                    , span [ id "dashboard-option-text2" ] [ text "song based" ]
+                    , span [ id "sidebar-option-text2" ] [ text "song based" ]
                     ]
                 ]
             , a [ href "#" ]
                 [ span [ class "material-symbols-outlined" ]
                     [ text "calendar_month" ]
-                , span [ class "dashboard-option-text" ]
+                , span [ class "sidebar-option-text" ]
                     [ text (nbsp ++ nbsp ++ nbsp)
                     , text "/"
                     , text (nbsp ++ nbsp ++ nbsp)
-                    , span [ id "dashboard-option-text2" ] [ text "year based" ]
+                    , span [ id "sidebar-option-text2" ] [ text "year based" ]
                     ]
                 ]
             , a [ href "#" ]
                 [ span [ class "material-symbols-outlined" ]
                     [ text "dashboard" ]
-                , span [ class "dashboard-option-text" ]
+                , span [ class "sidebar-option-text" ]
                     [ text (nbsp ++ nbsp ++ nbsp)
                     , text "/"
                     , text (nbsp ++ nbsp ++ nbsp)
-                    , span [ id "dashboard-option-text2" ] [ text "dashboard" ]
+                    , span [ id "sidebar-option-text2" ] [ text "dashboard" ]
                     ]
                 ]
             ]
-        , div [ class "dashboard-user" ] []
+        , div [ class "sidebar-user" ] [ text "Login" ]
         ]

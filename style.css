@@ -34,7 +34,7 @@
   font-size: 23px;
 }
 
-.dashboard {
+.sidebar {
   color: #fff;
 	position: fixed;
 	top: 0;
@@ -47,7 +47,7 @@
 	z-index: 1;
 }
 
-.dashboard:hover {
+.sidebar:hover {
 	width: 15%;
 }
 
@@ -69,12 +69,11 @@
   color: #4c647a;
 }
 
-
-.dashboard-options {
+.sidebar-options {
 	padding: 25px;
 }
 
-.dashboard-options a {
+.sidebar-options a {
 	display: block;
 	color: #fff;
 	text-decoration: none;
@@ -83,21 +82,21 @@
   white-space: nowrap;
 }
 
-.dashboard-option-text {
+.sidebar-option-text {
 	opacity: 0;
 	transition: opacity 0.5s ease;
 	transition-delay: 0.05s; /* delay for 0.5s */
 }
 
-#dashboard-option-text2 {
+#sidebar-option-text2 {
   transition: color 0.2s ease;
 }
 
-.dashboard:hover .dashboard-option-text {
+.sidebar:hover .sidebar-option-text {
 	opacity: 1;
 }
 
-.dashboard-options #dashboard-option-text2:hover {
+.sidebar-options #sidebar-option-text2:hover {
   color: #72afb4;
 }
 
