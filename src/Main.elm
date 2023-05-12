@@ -154,8 +154,7 @@ view model =
     , body =
         [ case model.route of
             HomeRoute ->
-                div []
-                    [ mood model ]
+                mood model
 
             LoginRoute ->
                 Login.login model

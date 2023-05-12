@@ -1,8 +1,8 @@
 module Login exposing (..)
 
 import Dict
-import Html exposing (Html, div, form, input)
-import Html.Attributes exposing (action, autocomplete, type_)
+import Html exposing (Html, button, div, form, h1, input, source, text, video)
+import Html.Attributes exposing (action, autocomplete, autoplay, class, id, loop, name, placeholder, src, type_)
 import Html.Events exposing (onInput, onSubmit)
 import Http exposing (Error, Response(..))
 import Json.Decode
@@ -47,6 +47,75 @@ submitLogin l =
         , body = encodeLogin l
         , expect = Http.expectStringResponse LoginSubmitHttp readBodyToken
         }
+
+
+login : Model -> Html Msg
+login model =
+    div [ class "login" ]
+        [ video [ autoplay True, loop True, id "bg-video" ] [ source [ src "/assets/waves.mp4", type_ "video/mp4" ] [] ]
+        , form [ class "form", action "javascript:void(0);", onSubmit LoginSubmit, autocomplete False ]
+            [ div [ class "control" ]
+                [ h1 [] [ text "Login" ]
+                ]
+            , div [ class "control block-cube block-input" ]
+                [ input
+                    [ name "email"
+                    , type_ "text"
+                    , placeholder "Email"
+                    , onInput
+                        (\v ->
+                            LoginUpdate
+                                (let
+                                    l =
+                                        model.login
+                                 in
+                                 { l | email = v }
+                                )
+                        )
+                    ]
+                    []
+                , div [ class "bg-top" ]
+                    [ div [ class "bg-inner" ] [] ]
+                , div [ class "bg-right" ]
+                    [ div [ class "bg-inner" ] [] ]
+                , div [ class "bg" ]
+                    [ div [ class "bg-inner" ] [] ]
+                ]
+            , div [ class "control block-cube block-input" ]
+                [ input
+                    [ name "password"
+                    , type_ "password"
+                    , placeholder "Password"
+                    , onInput
+                        (\v ->
+                            LoginUpdate
+                                (let
+                                    l =
+                                        model.login
+                                 in
+                                 { l | password = v }
+                                )
+                        )
+                    ]
+                    []
+                , div [ class "bg-top" ]
+                    [ div [ class "bg-inner" ] [] ]
+                , div [ class "bg-right" ]
+                    [ div [ class "bg-inner" ] [] ]
+                , div [ class "bg" ]
+                    [ div [ class "bg-inner" ] [] ]
+                ]
+            , button [ class "btn block-cube block-cube-hover", type_ "submit" ]
+                [ div [ class "bg-top" ]
+                    [ div [ class "bg-inner" ] [] ]
+                , div [ class "bg-right" ]
+                    [ div [ class "bg-inner" ] [] ]
+                , div [ class "bg" ]
+                    [ div [ class "bg-inner" ] [] ]
+                , div [ class "text" ] [ text "Submit" ]
+                ]
+            ]
+        ]
 
 
 
@@ -101,41 +170,36 @@ submitLogin l =
 -- }
 --
 -- (Http.post "http://localhost:3000/login" (encodeLogin l) decodeUser)
-
-
-login : Model -> Html Msg
-login model =
-    div []
-        [ form [ action "javascript:void(0);", onSubmit LoginSubmit ]
-            [ input
-                [ type_ "email"
-                , onInput
-                    (\v ->
-                        LoginUpdate
-                            (let
-                                l =
-                                    model.login
-                             in
-                             { l | email = v }
-                            )
-                    )
-                ]
-                []
-            , input
-                [ type_ "password"
-                , autocomplete True
-                , onInput
-                    (\v ->
-                        LoginUpdate
-                            (let
-                                l =
-                                    model.login
-                             in
-                             { l | password = v }
-                            )
-                    )
-                ]
-                []
-            , input [ type_ "submit" ] []
-            ]
-        ]
+-- [ form [ action "javascript:void(0);", onSubmit LoginSubmit ]
+--     [ input
+--         [ type_ "email"
+--         , onInput
+--             (\v ->
+--                 LoginUpdate
+--                     (let
+--                         l =
+--                             model.login
+--                      in
+--                      { l | email = v }
+--                     )
+--             )
+--         ]
+--         []
+--     , input
+--         [ type_ "password"
+--         , autocomplete True
+--         , onInput
+--             (\v ->
+--                 LoginUpdate
+--                     (let
+--                         l =
+--                             model.login
+--                      in
+--                      { l | password = v }
+--                     )
+--             )
+--         ]
+--         []
+--     , input [ type_ "submit" ] []
+--     ]
+-- ]
