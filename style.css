@@ -194,8 +194,10 @@ body {
   margin-top: 35px;
 }
 
-.material-symbols-outlined .form-label {
-  font-size: 300px;
+.range .material-symbols-outlined {
+  vertical-align: middle;
+  font-size: 40px !important;
+  font-variation-settings: 'OPSZ' 40;
 }
 
 .label-left {
@@ -210,10 +212,6 @@ body {
   text-align: right;
 }
 
-.buttons {
-  margin-bottom: auto;
-  margin-top: -500px;
-}
 
 input[type=range] {
   width: 100%;
@@ -306,6 +304,11 @@ input[type=range]:focus::-ms-fill-lower {
 
 input[type=range]:focus::-ms-fill-upper {
   background: #414543;
+}
+
+.buttons {
+  margin-bottom: auto;
+  margin-top: -500px;
 }
 
 .login {
