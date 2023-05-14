@@ -11,7 +11,13 @@ import Url exposing (Protocol(..))
 import Url.Parser exposing (s, top)
 
 
-main : Program String Model Msg
+type alias Flags =
+    { token : String
+    , user : Maybe User
+    }
+
+
+main : Program Flags Model Msg
 main =
     Browser.application
         { init = init
@@ -23,7 +29,11 @@ main =
         }
 
 
-init : String -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+init :
+    Flags
+    -> Url.Url
+    -> Nav.Key
+    -> ( Model, Cmd Msg )
 init flags url key =
     ( { counter = 0
       , url = url
@@ -32,8 +42,8 @@ init flags url key =
             Maybe.withDefault NotFoundRoute (Url.Parser.parse route url)
       , login = initLogin ()
       , register = initRegister ()
-      , user = Nothing
-      , token = flags
+      , user = flags.user
+      , token = flags.token
       , divvis = visibleController ()
       }
     , Cmd.none
