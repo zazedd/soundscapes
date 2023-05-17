@@ -51,6 +51,7 @@ init flags url key =
       , dashboardUsers = []
       , token = flags.token
       , divvis = visibleController ()
+      , playlist = Nothing
       }
     , case route_curr of
         DashboardRoute ->
@@ -163,6 +164,12 @@ update msg model =
 
         ToggleDiv ->
             ( { model | divvis = { visible1 = not model.divvis.visible1, visible2 = not model.divvis.visible2 } }, Cmd.none )
+
+        PlaylistRequest (Ok playlist_response) ->
+            ( { model | playlist = Just playlist_response }, Cmd.none )
+
+        PlaylistRequest (Err _) ->
+            ( model, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg

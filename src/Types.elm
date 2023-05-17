@@ -102,6 +102,15 @@ visibleController () =
     { visible1 = True, visible2 = False }
 
 
+type alias Playlist =
+    { name : String
+    , href : String
+    , image : String
+    , tracksHref : String
+    , songCount : Int
+    }
+
+
 type alias Model =
     { counter : Int
     , route : Route
@@ -113,6 +122,7 @@ type alias Model =
     , dashboardUsers : List User
     , token : String
     , divvis : DivVisibility
+    , playlist : Maybe Playlist
     }
 
 
@@ -127,3 +137,4 @@ type Msg
     | RegisterSubmitHttp (Result Http.Error Json.Decode.Value)
     | DashboardUsersList (Result Http.Error (List User))
     | ToggleDiv
+    | PlaylistRequest (Result Http.Error Playlist)
