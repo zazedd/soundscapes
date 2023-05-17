@@ -164,6 +164,36 @@ update msg model =
                 Err _ ->
                     ( model, Cmd.none )
 
+        UpdateUser id ->
+            let
+                user =
+                    List.filter (\a -> a.id == id) model.dashboardUsers |> List.head
+            in
+            case user of
+                Nothing ->
+                    ( model, Cmd.none )
+
+                Just uu ->
+                    ( model, Admin.updateUser uu model.token )
+
+        UpdateUserInput users ->
+            ( { model | dashboardUsers = users }, Cmd.none )
+
+        UpdateUserSubmit (Ok _) ->
+            ( model, Admin.getUsers model.token )
+
+        UpdateUserSubmit (Err _) ->
+            ( model, Cmd.none )
+
+        DeleteUser user_id ->
+            ( model, Cmd.batch [ Admin.deleteUser user_id model.token ] )
+
+        DeleteUserSubmit ( id, Ok _ ) ->
+            ( { model | dashboardUsers = List.filter (\uu -> uu.id /= id) model.dashboardUsers }, Cmd.none )
+
+        DeleteUserSubmit ( _, Err _ ) ->
+            ( model, Cmd.none )
+
         ToggleDiv ->
             ( { model | divvis = { visible1 = not model.divvis.visible1, visible2 = not model.divvis.visible2 } }, Cmd.none )
 
