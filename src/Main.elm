@@ -1,5 +1,6 @@
 port module Main exposing (init, main)
 
+import Admin
 import Browser
 import Browser.Navigation as Nav
 import Html exposing (div, text)
@@ -35,18 +36,28 @@ init :
     -> Nav.Key
     -> ( Model, Cmd Msg )
 init flags url key =
+    let
+        route_curr =
+            Maybe.withDefault NotFoundRoute (Url.Parser.parse route url)
+    in
     ( { counter = 0
       , url = url
       , key = key
       , route =
-            Maybe.withDefault NotFoundRoute (Url.Parser.parse route url)
+            route_curr
       , login = initLogin ()
       , register = initRegister ()
       , user = flags.user
+      , dashboardUsers = []
       , token = flags.token
       , divvis = visibleController ()
       }
-    , Cmd.none
+    , case route_curr of
+        DashboardRoute ->
+            Cmd.batch [ Admin.getUsers flags.token ]
+
+        _ ->
+            Cmd.none
     )
 
 
@@ -54,6 +65,7 @@ route : Url.Parser.Parser (Route -> a) a
 route =
     Url.Parser.oneOf
         [ Url.Parser.map HomeRoute top
+        , Url.Parser.map DashboardRoute (s "admin")
         , Url.Parser.map LoginRoute (s "login")
         , Url.Parser.map RegisterRoute (s "register")
         ]
@@ -87,9 +99,12 @@ update msg model =
             in
             case nextRoute of
                 Just r ->
-                    ( { model | url = url, route = r }
-                    , cmd
-                    )
+                    case r of
+                        DashboardRoute ->
+                            ( { model | url = url, route = r }, Cmd.batch [ cmd, Admin.getUsers model.token ] )
+
+                        _ ->
+                            ( { model | url = url, route = r }, cmd )
 
                 Nothing ->
                     ( { model | url = url, route = NotFoundRoute }
@@ -138,24 +153,21 @@ update msg model =
         RegisterSubmitHttp (Err _) ->
             ( model, Cmd.none )
 
+        DashboardUsersList r ->
+            case r of
+                Ok lu ->
+                    ( { model | dashboardUsers = lu }, Cmd.none )
+
+                Err _ ->
+                    ( model, Cmd.none )
+
         ToggleDiv ->
             ( { model | divvis = { visible1 = not model.divvis.visible1, visible2 = not model.divvis.visible2 } }, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    case model.route of
-        HomeRoute ->
-            Sub.none
-
-        RegisterRoute ->
-            Sub.none
-
-        LoginRoute ->
-            Sub.none
-
-        NotFoundRoute ->
-            Sub.none
+    Sub.none
 
 
 view : Model -> Browser.Document Msg
@@ -165,6 +177,22 @@ view model =
         [ case model.route of
             HomeRoute ->
                 mood model
+
+            DashboardRoute ->
+                let
+                    not_found =
+                        div [] [ text "Not Found!" ]
+                in
+                case model.user of
+                    Nothing ->
+                        not_found
+
+                    Just user ->
+                        if user.role == 1 then
+                            Admin.admin model
+
+                        else
+                            not_found
 
             LoginRoute ->
                 Login.login model
