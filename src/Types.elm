@@ -10,6 +10,7 @@ import Url
 
 type Route
     = HomeRoute
+    | DashboardRoute
     | LoginRoute
     | RegisterRoute
     | NotFoundRoute
@@ -73,10 +74,21 @@ initUser () =
 decodeUser : Json.Decode.Decoder User
 decodeUser =
     Json.Decode.map4 User
-        (Json.Decode.field "username" Json.Decode.string)
+        (Json.Decode.field "id" Json.Decode.string)
         (Json.Decode.field "email" Json.Decode.string)
         (Json.Decode.field "role" Json.Decode.int)
-        (Json.Decode.field "id" Json.Decode.string)
+        (Json.Decode.field "username" Json.Decode.string)
+
+
+decodeUserList : Json.Decode.Decoder (List User)
+decodeUserList =
+    Json.Decode.list
+        (Json.Decode.map4 User
+            (Json.Decode.field "id" Json.Decode.string)
+            (Json.Decode.field "email" Json.Decode.string)
+            (Json.Decode.field "role" Json.Decode.int)
+            (Json.Decode.field "username" Json.Decode.string)
+        )
 
 
 type alias DivVisibility =
@@ -98,6 +110,7 @@ type alias Model =
     , login : Login
     , register : Register
     , user : Maybe User
+    , dashboardUsers : List User
     , token : String
     , divvis : DivVisibility
     }
@@ -112,4 +125,5 @@ type Msg
     | RegisterUpdate Register
     | RegisterSubmit
     | RegisterSubmitHttp (Result Http.Error Json.Decode.Value)
+    | DashboardUsersList (Result Http.Error (List User))
     | ToggleDiv
