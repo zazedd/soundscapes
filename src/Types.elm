@@ -110,6 +110,10 @@ type alias Playlist =
     , songCount : Int
     }
 
+-- TODO put everything needed for playlist thats in the model inside a struct
+-- TODO submit button actually requests api and shows the playlist in the middle of the screen
+-- TODO dont let anyone submit anything if they dont have logged in
+-- TODO start working on the other api requests and saving the links to the playlists created on the databas
 
 type alias Model =
     { counter : Int
@@ -121,6 +125,7 @@ type alias Model =
     , user : Maybe User
     , dashboardUsers : List User
     , token : String
+    , mood : Int
     , divvis : DivVisibility
     , playlist : Maybe Playlist
     }
@@ -137,4 +142,6 @@ type Msg
     | RegisterSubmitHttp (Result Http.Error Json.Decode.Value)
     | DashboardUsersList (Result Http.Error (List User))
     | ToggleDiv
+    | MoodUpdate Int
+    | PlaylistSubmit
     | PlaylistRequest (Result Http.Error Playlist)

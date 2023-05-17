@@ -4,8 +4,8 @@ import Common exposing (sidebar)
 import Html exposing (Html, button, div, form, h1, input, label, option, p, select, source, span, text, video)
 import Html.Attributes exposing (autoplay, class, classList, disabled, for, id, loop, selected, src, step, style, type_, value)
 import Html.Attributes.Aria exposing (ariaLabel)
-import Html.Events exposing (onClick)
-import Types exposing (Model, Msg)
+import Html.Events exposing (onClick, onInput)
+import Types exposing (Model, Msg(..))
 
 
 mood : Model -> Html Msg
@@ -29,9 +29,19 @@ mood model =
                             , class "form-range"
                             , Html.Attributes.min "0"
                             , Html.Attributes.max "5"
-                            , step "0.5"
+                            , step "1"
                             , id "emotionalRange"
                             , disabled (not model.divvis.visible1)
+                            , onInput
+                                (\v ->
+                                    MoodUpdate
+                                        (let
+                                            val =
+                                                Maybe.withDefault -1 (String.toInt v)
+                                         in
+                                         val
+                                        )
+                                )
                             ]
                             []
                         , div [ class "label-right" ]

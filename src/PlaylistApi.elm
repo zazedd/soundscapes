@@ -6,12 +6,12 @@ import Json.Decode as Json
 import Types exposing (..)
 
 
-playlistRequest : String -> Cmd Msg
+playlistRequest : Int -> Cmd Msg
 playlistRequest mood =
     Http.request
         { method = "GET"
         , headers = []
-        , url = "https://api.spotify.com/v1/search?q=" ++ mood ++ "&type=playlist&market=PT"
+        , url = "https://api.spotify.com/v1/search?q=" ++ (mood |> String.fromInt ) ++ "&type=playlist&market=PT"
         , body = Http.emptyBody
         , expect = Http.expectJson PlaylistRequest playlistDecoder
         , timeout = Nothing

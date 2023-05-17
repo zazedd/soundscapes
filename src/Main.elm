@@ -6,6 +6,7 @@ import Browser.Navigation as Nav
 import Html exposing (div, text)
 import Login exposing (submitLogin)
 import Mood exposing (mood)
+import PlaylistApi exposing (..)
 import Register exposing (submitRegister)
 import Types exposing (..)
 import Url exposing (Protocol(..))
@@ -50,6 +51,7 @@ init flags url key =
       , user = flags.user
       , dashboardUsers = []
       , token = flags.token
+      , mood = -1
       , divvis = visibleController ()
       , playlist = Nothing
       }
@@ -164,6 +166,16 @@ update msg model =
 
         ToggleDiv ->
             ( { model | divvis = { visible1 = not model.divvis.visible1, visible2 = not model.divvis.visible2 } }, Cmd.none )
+
+        MoodUpdate m ->
+            ( { model
+                | mood = m
+              }
+            , Cmd.none
+            )
+
+        PlaylistSubmit ->
+            ( model, playlistRequest model.mood )
 
         PlaylistRequest (Ok playlist_response) ->
             ( { model | playlist = Just playlist_response }, Cmd.none )
