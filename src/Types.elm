@@ -71,6 +71,17 @@ initUser () =
     Nothing
 
 
+encodeUser : User -> Http.Body
+encodeUser l =
+    Http.jsonBody <|
+        Json.Encode.object
+            [ ( "email", Json.Encode.string l.email )
+            , ( "username", Json.Encode.string l.username )
+            , ( "id", Json.Encode.string l.id )
+            , ( "role", Json.Encode.int l.role )
+            ]
+
+
 decodeUser : Json.Decode.Decoder User
 decodeUser =
     Json.Decode.map4 User
@@ -110,10 +121,13 @@ type alias Playlist =
     , songCount : Int
     }
 
+
+
 -- TODO put everything needed for playlist thats in the model inside a struct
 -- TODO submit button actually requests api and shows the playlist in the middle of the screen
 -- TODO dont let anyone submit anything if they dont have logged in
 -- TODO start working on the other api requests and saving the links to the playlists created on the databas
+
 
 type alias Model =
     { counter : Int
@@ -141,6 +155,10 @@ type Msg
     | RegisterSubmit
     | RegisterSubmitHttp (Result Http.Error Json.Decode.Value)
     | DashboardUsersList (Result Http.Error (List User))
+    | UpdateUser String
+    | UpdateUserSubmit (Result Http.Error ())
+    | DeleteUser ( String, String )
+    | DeleteUserSubmit ( String, Result Http.Error () )
     | ToggleDiv
     | MoodUpdate Int
     | PlaylistSubmit
