@@ -1,7 +1,8 @@
 module Admin exposing (..)
 
-import Html exposing (Html, button, div, p, table, text, th, tr)
-import Html.Events exposing (onClick)
+import Html exposing (Html, button, div, input, p, table, text, th, tr)
+import Html.Attributes exposing (type_, value)
+import Html.Events exposing (onClick, onInput)
 import Http exposing (emptyBody, header)
 import Types exposing (Model, Msg(..), User, decodeUserList)
 
@@ -45,18 +46,80 @@ deleteUser id token =
         }
 
 
-tableUsers : String -> List User -> List (Html.Html Msg)
-tableUsers token =
+tableUsers : List User -> List (Html.Html Msg)
+tableUsers users =
     List.map
         (\user ->
             tr []
                 [ th [] [ text user.id ]
-                , th [] [ text user.username ]
-                , th [] [ text user.email ]
-                , th [] [ text (user.role |> String.fromInt) ]
-                , th [] [ button [ onClick (DeleteUser ( user.id, token )) ] [ text ("Delete " ++ user.username) ] ]
+                , th []
+                    [ input
+                        [ value user.username
+                        , type_ "text"
+                        , onInput
+                            (\username ->
+                                UpdateUserInput
+                                    (List.map
+                                        (\u ->
+                                            if u.id == user.id then
+                                                { u | username = username }
+
+                                            else
+                                                u
+                                        )
+                                        users
+                                    )
+                            )
+                        ]
+                        []
+                    ]
+                , th []
+                    [ input
+                        [ value user.email
+                        , type_ "email"
+                        , onInput
+                            (\email ->
+                                UpdateUserInput
+                                    (List.map
+                                        (\u ->
+                                            if u.id == user.id then
+                                                { u | email = email }
+
+                                            else
+                                                u
+                                        )
+                                        users
+                                    )
+                            )
+                        ]
+                        []
+                    ]
+                , th []
+                    [ input
+                        [ value (user.role |> String.fromInt)
+                        , type_ "number"
+                        , onInput
+                            (\role ->
+                                UpdateUserInput
+                                    (List.map
+                                        (\u ->
+                                            if u.id == user.id then
+                                                { u | role = Maybe.withDefault 2 (String.toInt role) }
+
+                                            else
+                                                u
+                                        )
+                                        users
+                                    )
+                            )
+                        ]
+                        []
+                    ]
+                , th [] [ button [ onClick (UpdateUser user.id) ] [ text "Update" ] ]
+                , th [] [ button [ onClick (DeleteUser user.id) ] [ text "Delete" ] ]
                 ]
         )
+        users
 
 
 admin : Model -> Html Msg
@@ -74,7 +137,7 @@ admin model =
                     , th [] [ text "Role" ]
                     , th [] [ text "Delete" ]
                     ]
-                    :: tableUsers model.token model.dashboardUsers
+                    :: tableUsers model.dashboardUsers
                 )
             ]
         ]

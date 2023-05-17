@@ -174,13 +174,19 @@ update msg model =
                     ( model, Cmd.none )
 
                 Just uu ->
-                    ( model, Admin.updateUser uu id )
+                    ( model, Admin.updateUser uu model.token )
 
-        UpdateUserSubmit _ ->
+        UpdateUserInput users ->
+            ( { model | dashboardUsers = users }, Cmd.none )
+
+        UpdateUserSubmit (Ok _) ->
+            ( model, Admin.getUsers model.token )
+
+        UpdateUserSubmit (Err _) ->
             ( model, Cmd.none )
 
-        DeleteUser ( user_id, token ) ->
-            ( model, Cmd.batch [ Admin.deleteUser user_id token ] )
+        DeleteUser user_id ->
+            ( model, Cmd.batch [ Admin.deleteUser user_id model.token ] )
 
         DeleteUserSubmit ( id, Ok _ ) ->
             ( { model | dashboardUsers = List.filter (\uu -> uu.id /= id) model.dashboardUsers }, Cmd.none )

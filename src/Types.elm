@@ -156,8 +156,9 @@ type Msg
     | RegisterSubmitHttp (Result Http.Error Json.Decode.Value)
     | DashboardUsersList (Result Http.Error (List User))
     | UpdateUser String
+    | UpdateUserInput (List User)
     | UpdateUserSubmit (Result Http.Error ())
-    | DeleteUser ( String, String )
+    | DeleteUser String
     | DeleteUserSubmit ( String, Result Http.Error () )
     | ToggleDiv
     | MoodUpdate Int
