@@ -1,7 +1,7 @@
 module Admin exposing (..)
 
-import Html exposing (Html, button, div, input, p, table, text, th, tr)
-import Html.Attributes exposing (type_, value)
+import Html exposing (..)
+import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
 import Http exposing (emptyBody, header)
 import Types exposing (Model, Msg(..), User, decodeUserList)
@@ -12,7 +12,7 @@ getUsers token =
     Http.request
         { url = "http://localhost:3000/admin/users"
         , method = "GET"
-        , headers = [ header "auth" token ]
+        , headers = [ Http.header "auth" token ]
         , body = Http.emptyBody
         , expect = Http.expectJson DashboardUsersList decodeUserList
         , timeout = Nothing
@@ -25,7 +25,7 @@ updateUser user token =
     Http.request
         { url = "http://localhost:3000/admin/users/" ++ user.id
         , method = "PUT"
-        , headers = [ header "auth" token ]
+        , headers = [ Http.header "auth" token ]
         , body = Types.encodeUser user
         , expect = Http.expectWhatever UpdateUserSubmit
         , timeout = Nothing
@@ -38,7 +38,7 @@ deleteUser id token =
     Http.request
         { url = "http://localhost:3000/admin/users/" ++ id
         , method = "DELETE"
-        , headers = [ header "auth" token ]
+        , headers = [ Http.header "auth" token ]
         , body = emptyBody
         , expect = Http.expectWhatever (\a -> DeleteUserSubmit ( id, a ))
         , timeout = Nothing
@@ -50,11 +50,12 @@ tableUsers : List User -> List (Html.Html Msg)
 tableUsers users =
     List.map
         (\user ->
-            tr []
-                [ th [] [ text user.id ]
-                , th []
+            tr [ class "table-dark" ]
+                [ td [ class "table-dark" ] [ text user.id ]
+                , td [ class "table-dark" ]
                     [ input
-                        [ value user.username
+                        [ class "form-control"
+                        , value user.username
                         , type_ "text"
                         , onInput
                             (\username ->
@@ -73,9 +74,10 @@ tableUsers users =
                         ]
                         []
                     ]
-                , th []
+                , td [ class "table-dark" ]
                     [ input
-                        [ value user.email
+                        [ class "form-control"
+                        , value user.email
                         , type_ "email"
                         , onInput
                             (\email ->
@@ -94,9 +96,10 @@ tableUsers users =
                         ]
                         []
                     ]
-                , th []
+                , th [ class "table-dark" ]
                     [ input
-                        [ value (user.role |> String.fromInt)
+                        [ class "form-control"
+                        , value (user.role |> String.fromInt)
                         , type_ "number"
                         , onInput
                             (\role ->
@@ -115,8 +118,8 @@ tableUsers users =
                         ]
                         []
                     ]
-                , th [] [ button [ onClick (UpdateUser user.id) ] [ text "Update" ] ]
-                , th [] [ button [ onClick (DeleteUser user.id) ] [ text "Delete" ] ]
+                , td [ class "table-dark" ] [ button [ class "btn btn-primary", onClick (UpdateUser user.id) ] [ text "Update" ] ]
+                , td [ class "table-dark" ] [ button [ class "btn btn-primary", onClick (DeleteUser user.id) ] [ text "Delete" ] ]
                 ]
         )
         users
@@ -124,20 +127,23 @@ tableUsers users =
 
 admin : Model -> Html Msg
 admin model =
-    div []
-        [ p []
+    div [class "admin-content"]
+        [ p [ id "admintitle" ]
             [ text "Admin dashboard" ]
         , div
-            []
-            [ table []
-                (tr []
-                    [ th [] [ text "Id" ]
-                    , th [] [ text "Username" ]
-                    , th [] [ text "Email" ]
-                    , th [] [ text "Role" ]
-                    , th [] [ text "Delete" ]
-                    ]
-                    :: tableUsers model.dashboardUsers
-                )
+            [class "admin-content"]
+            [ p [] [ text "Admins can change or delete users" ]
+            , table [class "table"]
+            [ thead [style "margin-bottom" "100px"] [ tr []
+            [ th [class "table-dark"] [ text "Id" ]
+            , th [class "table-dark"] [ text "Username" ]
+            , th [class "table-dark"] [ text "Email" ]
+            , th [class "table-dark"] [ text "Role" ]
+            , th [class "table-dark"] [ text "Update" ]
+            , th [class "table-dark"] [ text "Delete" ]
+            ]
+            ]
+            , tbody [] (tableUsers model.dashboardUsers)
             ]
         ]
+      ]
