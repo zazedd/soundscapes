@@ -107,7 +107,8 @@ playlistShow model =
             [ div [ class "playlist-background" ] []
             , div [ class "playlist-scroll" ]
                 (List.map
-                    (\track ->
+                    (\track -> 
+                      div [] [
                         div [ style "margin" "20px" ]
                             [ img [ src track.image, height 65, width 65 ] []
                             , text (nbsp ++ nbsp ++ nbsp ++ nbsp)
@@ -115,6 +116,10 @@ playlistShow model =
                             , text (nbsp ++ "/" ++ nbsp)
                             , text track.artistName
                             ]
+                        , Html.hr [] []
+                        ]
+                        
+
                     )
                     tracks
                 )
