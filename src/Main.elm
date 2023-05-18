@@ -4,6 +4,7 @@ import Admin
 import Browser
 import Browser.Navigation as Nav
 import Html exposing (div, text)
+import Http exposing (Error(..), Response(..))
 import Login exposing (submitLogin)
 import Mood exposing (mood)
 import PlaylistApi exposing (..)
@@ -54,6 +55,10 @@ init flags url key =
       , mood = -1
       , divvis = visibleController ()
       , playlist = Nothing
+      , tracks = Nothing
+      , access_token = "BQCgylLdE3S8q86WFXrv-8oYbROieadICJkFnQGsDC2ts8N0vp-xtQCy1hG4kiWO5WB-Ur95iMtRBv8tXmKOmV1ksZO7UxhoF2YTzytXKDvbmB7OuZZ1"
+      , client_id = "26acd433c8d54cccac429ca13f8937da"
+      , client_secret = "2a8cf2f59c29437789386aef82a0ea8f"
       }
     , case route_curr of
         DashboardRoute ->
@@ -61,6 +66,7 @@ init flags url key =
 
         _ ->
             Cmd.none
+      -- refreshTokenRequest PlayListSpotifyRequest "26acd433c8d54cccac429ca13f8937da" "2a8cf2f59c29437789386aef82a0ea8f"
     )
 
 
@@ -205,13 +211,81 @@ update msg model =
             )
 
         PlaylistSubmit ->
-            ( model, playlistRequest model.mood )
+            ( model, playlistRequest model.access_token model.mood )
 
         PlaylistRequest (Ok playlist_response) ->
-            ( { model | playlist = Just playlist_response }, Cmd.none )
+            let
+                divv =
+                    { visible1 = False, visible2 = False }
+            in
+            let
+                m =
+                    { model | playlist = Just playlist_response, divvis = divv }
+            in
+            case m.playlist of
+                Nothing ->
+                    Debug.log "oh foda-se"
+                        ( m, Cmd.none )
 
-        PlaylistRequest (Err _) ->
+                Just play ->
+                    ( m, tracksRequest model.access_token play.tracksHref )
+
+        PlaylistRequest (Err e) ->
+            case e of
+                BadStatus mdata ->
+                    case mdata of
+                        401 ->
+                            ( model
+                            , refreshTokenRequest PlayListSpotifyRequest model.client_id model.client_secret
+                            )
+
+                        _ ->
+                            ( model, Cmd.none )
+
+                _ ->
+                    ( model, Cmd.none )
+
+        RefreshTokenRequest ( repeat, Ok u ) ->
+            let
+                m =
+                    { model | access_token = u.access_token }
+            in
+            case repeat of
+                PlayListSpotifyRequest ->
+                    ( m, playlistRequest model.access_token model.mood )
+
+                TracksSpotifyRequest ->
+                    case model.playlist of
+                        Nothing ->
+                            ( m, Cmd.none )
+
+                        Just play ->
+                            ( m, tracksRequest model.access_token play.tracksHref )
+
+        RefreshTokenRequest ( _, Err _ ) ->
             ( model, Cmd.none )
+
+        TracksRequest (Ok t) ->
+            ( { model | tracks = Just t }, Cmd.none )
+
+        TracksRequest (Err e) ->
+            case e of
+                BadStatus mdata ->
+                    case mdata of
+                        401 ->
+                            ( model
+                            , refreshTokenRequest TracksSpotifyRequest model.client_id model.client_secret
+                            )
+
+                        _ ->
+                            ( model, Cmd.none )
+
+                _ ->
+                    ( model, Cmd.none )
+
+
+
+-- ( model, refreshTokenRequest TracksSpotifyRequest model.client_id model.client_secret )
 
 
 subscriptions : Model -> Sub Msg
