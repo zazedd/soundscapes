@@ -6,6 +6,28 @@ import Json.Decode as Json
 import Types exposing (..)
 
 
+moodSwitch : Int -> String
+moodSwitch mood =
+    case mood of
+        1 ->
+            "Very+Sad"
+
+        2 ->
+            "Sad"
+
+        3 ->
+            "Neutral"
+
+        4 ->
+            "Happy"
+
+        5 ->
+            "Very+Happy"
+
+        _ ->
+            ""
+
+
 playlistRequest : String -> Int -> Cmd Msg
 playlistRequest access_token mood =
     Http.request
@@ -16,7 +38,7 @@ playlistRequest access_token mood =
                     ++ access_token
                 )
             ]
-        , url = "https://api.spotify.com/v1/search?q=" ++ (mood |> String.fromInt) ++ "&type=playlist&market=PT&limit=30"
+        , url = "https://api.spotify.com/v1/search?q=" ++ (mood |> moodSwitch) ++ "&type=playlist&market=PT&limit=30"
         , body = Http.emptyBody
         , expect = Http.expectJson PlaylistRequest playlistDecoder
         , timeout = Nothing

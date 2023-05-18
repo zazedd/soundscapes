@@ -21,7 +21,7 @@ moodSelector model =
             , input
                 [ type_ "range"
                 , class "form-range"
-                , Html.Attributes.min "0"
+                , Html.Attributes.min "1"
                 , Html.Attributes.max "5"
                 , step "1"
                 , id "emotionalRange"
@@ -64,7 +64,7 @@ moodSelector model =
                 ]
             ]
         ]
-    , div [ class "form", style "margin-top" "-550px", style "margin-bottom" "auto", style "width" "150px" ]
+    , div [ class "form", style "margin-top" "-50px", style "margin-bottom" "auto", style "width" "150px" ]
         [ if model.divvis.visible1 then
             div [ class "button" ]
                 [ button [ class "btn block-cube block-cube-hover", id "b", onClick Types.ToggleDiv ]
