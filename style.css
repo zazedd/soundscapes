@@ -160,6 +160,19 @@ table {
   border-spacing: 10px;
 }
 
+.playlist {
+  background-color: #333333b0;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  width: 50%;
+  border-radius: 25px;
+  overflow-y: scroll;
+}
+
+.playlist text {
+  margin-left: 40px;
+}
+
 .dashboard:hover ~ .main-content {
   filter: blur(5px);
 }

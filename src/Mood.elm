@@ -1,6 +1,6 @@
 module Mood exposing (mood)
 
-import Common exposing (sidebar)
+import Common exposing (nbsp, sidebar)
 import Html exposing (Html, button, div, form, h1, img, input, label, option, p, select, source, span, text, video)
 import Html.Attributes exposing (autoplay, class, classList, disabled, for, height, href, id, loop, selected, src, step, style, type_, value, width)
 import Html.Attributes.Aria exposing (ariaLabel)
@@ -104,13 +104,15 @@ playlistShow model =
             ]
 
         Just tracks ->
-            [ div []
+            [ div [ class "playlist-background" ] []
+            , div [ class "playlist-scroll" ]
                 (List.map
                     (\track ->
-                        div []
-                            [ img [ src track.image, height 150, width 150 ] []
+                        div [ style "margin" "20px" ]
+                            [ img [ src track.image, height 65, width 65 ] []
+                            , text (nbsp ++ nbsp ++ nbsp ++ nbsp)
                             , text track.musicName
-                            , text track.albumName
+                            , text (nbsp ++ "/" ++ nbsp)
                             , text track.artistName
                             ]
                     )
@@ -125,13 +127,12 @@ mood model =
         [ video [ autoplay True, loop True, id "bg-video" ] [ source [ src "/assets/waves.mp4", type_ "video/mp4" ] [] ]
         , sidebar model
         , div [ class "main-content" ]
-            [ h1 [ id "title" ] [ text "soundscapes" ]
-            , div [ class "center-content" ]
-                (if model.divvis.visible1 || model.divvis.visible2 then
-                    moodSelector model
+            [ h1 [ id "title" ]
+                [ text "soundscapes" ]
+            , if model.divvis.visible1 || model.divvis.visible2 then
+                div [ class "center-content" ] (moodSelector model)
 
-                 else
-                    playlistShow model
-                )
+              else
+                div [ class "playlist" ] (playlistShow model)
             ]
         ]
