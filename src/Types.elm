@@ -122,6 +122,44 @@ type alias Playlist =
     }
 
 
+type alias SpotifyAuth =
+    { access_token : String
+    , token_type : String
+    , expires_in : Int
+    }
+
+
+decodeSpotifyAuth : Json.Decode.Decoder SpotifyAuth
+decodeSpotifyAuth =
+    Json.Decode.map3 SpotifyAuth
+        (Json.Decode.field "access_token" Json.Decode.string)
+        (Json.Decode.field "token_type" Json.Decode.string)
+        (Json.Decode.field "expires_in" Json.Decode.int)
+
+
+type alias Tracks =
+    { id : String
+    , musicName : String
+    , albumName : String
+    , image : String
+    , artistName : String
+    }
+
+
+decodeTracks : Json.Decode.Decoder (List Tracks)
+decodeTracks =
+    Json.Decode.at [ "items" ]
+        (Json.Decode.list
+            (Json.Decode.map5 Tracks
+                (Json.Decode.at [ "track" ] (Json.Decode.field "href" Json.Decode.string))
+                (Json.Decode.at [ "track" ] (Json.Decode.field "name" Json.Decode.string))
+                (Json.Decode.at [ "track", "album" ] (Json.Decode.field "name" Json.Decode.string))
+                (Json.Decode.at [ "track", "album", "images", "0" ] (Json.Decode.field "url" Json.Decode.string))
+                (Json.Decode.at [ "track", "artists", "0" ] (Json.Decode.field "name" Json.Decode.string))
+            )
+        )
+
+
 
 -- TODO put everything needed for playlist thats in the model inside a struct
 -- TODO submit button actually requests api and shows the playlist in the middle of the screen
@@ -142,7 +180,16 @@ type alias Model =
     , mood : Int
     , divvis : DivVisibility
     , playlist : Maybe Playlist
+    , tracks : Maybe (List Tracks)
+    , access_token : String
+    , client_id : String
+    , client_secret : String
     }
+
+
+type SpotifyRequest
+    = PlayListSpotifyRequest
+    | TracksSpotifyRequest
 
 
 type Msg
@@ -164,3 +211,5 @@ type Msg
     | MoodUpdate Int
     | PlaylistSubmit
     | PlaylistRequest (Result Http.Error Playlist)
+    | RefreshTokenRequest ( SpotifyRequest, Result Http.Error SpotifyAuth )
+    | TracksRequest (Result Http.Error (List Tracks))
