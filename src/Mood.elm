@@ -1,6 +1,6 @@
 module Mood exposing (mood)
 
-import Common exposing (sidebar)
+import Common exposing (nbsp, sidebar)
 import Html exposing (Html, button, div, h1, img, input, label, option, p, select, source, span, text, video)
 import Html.Attributes exposing (autoplay, class, classList, disabled, for, height, id, loop, selected, src, step, style, type_, value, width)
 import Html.Attributes.Aria exposing (ariaLabel)
@@ -21,7 +21,7 @@ moodSelector model =
             , input
                 [ type_ "range"
                 , class "form-range"
-                , Html.Attributes.min "0"
+                , Html.Attributes.min "1"
                 , Html.Attributes.max "5"
                 , step "1"
                 , id "emotionalRange"
@@ -64,7 +64,7 @@ moodSelector model =
                 ]
             ]
         ]
-    , div [ class "form", style "margin-top" "-550px", style "margin-bottom" "auto", style "width" "150px" ]
+    , div [ class "form", style "margin-top" "-50px", style "margin-bottom" "auto", style "width" "150px" ]
         [ if model.divvis.visible1 then
             div [ class "button" ]
                 [ button [ class "btn block-cube block-cube-hover", id "b", onClick Types.ToggleDiv ]
@@ -104,14 +104,19 @@ playlistShow model =
             ]
 
         Just tracks ->
-            [ div []
+            [ div [ class "playlist-background" ] []
+            , div [ class "playlist-scroll" ]
                 (List.map
                     (\track ->
                         div []
-                            [ img [ src track.image, height 150, width 150 ] []
-                            , text track.musicName
-                            , text track.albumName
-                            , text track.artistName
+                            [ div [ style "margin" "20px" ]
+                                [ img [ src track.image, height 65, width 65 ] []
+                                , text (nbsp ++ nbsp ++ nbsp ++ nbsp)
+                                , text track.musicName
+                                , text (nbsp ++ "/" ++ nbsp)
+                                , text track.artistName
+                                ]
+                            , Html.hr [] []
                             ]
                     )
                     tracks
@@ -125,13 +130,12 @@ mood model =
         [ video [ autoplay True, loop True, id "bg-video" ] [ source [ src "/assets/waves.mp4", type_ "video/mp4" ] [] ]
         , sidebar model
         , div [ class "main-content" ]
-            [ h1 [ id "title" ] [ text "soundscapes" ]
-            , div [ class "center-content" ]
-                (if model.divvis.visible1 || model.divvis.visible2 then
-                    moodSelector model
+            [ h1 [ id "title" ]
+                [ text "soundscapes" ]
+            , if model.divvis.visible1 || model.divvis.visible2 then
+                div [ class "center-content" ] (moodSelector model)
 
-                 else
-                    playlistShow model
-                )
+              else
+                div [ class "playlist" ] (playlistShow model)
             ]
         ]

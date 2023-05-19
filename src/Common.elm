@@ -1,4 +1,4 @@
-module Common exposing (nbsp, sidebar)
+module Common exposing (..)
 
 import Html exposing (Html, a, div, hr, img, span, text)
 import Html.Attributes exposing (class, href, id, src, style)
@@ -17,7 +17,7 @@ user_login model =
         Just user ->
             let
                 uname =
-                    user.id
+                    user.username
             in
             div []
                 [ div [ class "sidebar-user-pic" ]
