@@ -1,8 +1,8 @@
 module Mood exposing (mood)
 
 import Common exposing (sidebar)
-import Html exposing (Html, button, div, form, h1, img, input, label, option, p, select, source, span, text, video)
-import Html.Attributes exposing (autoplay, class, classList, disabled, for, height, href, id, loop, selected, src, step, style, type_, value, width)
+import Html exposing (Html, button, div, h1, img, input, label, option, p, select, source, span, text, video)
+import Html.Attributes exposing (autoplay, class, classList, disabled, for, height, id, loop, selected, src, step, style, type_, value, width)
 import Html.Attributes.Aria exposing (ariaLabel)
 import Html.Events exposing (onClick, onInput)
 import Types exposing (Model, Msg(..))

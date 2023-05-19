@@ -1,4 +1,4 @@
-module Common exposing (sidebar)
+module Common exposing (nbsp, sidebar)
 
 import Html exposing (Html, a, div, hr, img, span, text)
 import Html.Attributes exposing (class, href, id, src, style)

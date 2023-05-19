@@ -2,6 +2,7 @@ module Types exposing (..)
 
 import Browser
 import Browser.Navigation as Nav
+import Bytes exposing (Bytes)
 import Http
 import Json.Decode
 import Json.Encode
@@ -184,6 +185,7 @@ type alias Model =
     , access_token : String
     , client_id : String
     , client_secret : String
+    , pdfBytes : Maybe Bytes
     }
 
 
@@ -213,3 +215,4 @@ type Msg
     | PlaylistRequest (Result Http.Error Playlist)
     | RefreshTokenRequest ( SpotifyRequest, Result Http.Error SpotifyAuth )
     | TracksRequest (Result Http.Error (List Tracks))
+    | DownloadPdf
