@@ -11,6 +11,7 @@ import Url
 
 type Route
     = HomeRoute
+    | AdminRoute
     | DashboardRoute
     | LoginRoute
     | RegisterRoute
@@ -161,6 +162,34 @@ decodeTracks =
         )
 
 
+type alias PlaylistStored =
+    { id : String
+    , name : String
+    , user_id : String
+    , url : String
+    }
+
+
+decodePlaylistsStored : Json.Decode.Decoder PlaylistStored
+decodePlaylistsStored =
+    Json.Decode.map4 PlaylistStored
+        (Json.Decode.field "id" Json.Decode.string)
+        (Json.Decode.field "name" Json.Decode.string)
+        (Json.Decode.field "user_id" Json.Decode.string)
+        (Json.Decode.field "url" Json.Decode.string)
+
+
+decodePlaylistsStoredList : Json.Decode.Decoder (List PlaylistStored)
+decodePlaylistsStoredList =
+    Json.Decode.list
+        (Json.Decode.map4 PlaylistStored
+            (Json.Decode.field "id" Json.Decode.string)
+            (Json.Decode.field "name" Json.Decode.string)
+            (Json.Decode.field "user_id" Json.Decode.string)
+            (Json.Decode.field "url" Json.Decode.string)
+        )
+
+
 
 -- TODO put everything needed for playlist thats in the model inside a struct
 -- TODO submit button actually requests api and shows the playlist in the middle of the screen
@@ -186,6 +215,7 @@ type alias Model =
     , client_id : String
     , client_secret : String
     , pdfBytes : Maybe Bytes
+    , playlistsStored : List PlaylistStored
     }
 
 
@@ -215,4 +245,7 @@ type Msg
     | PlaylistRequest (Result Http.Error Playlist)
     | RefreshTokenRequest ( SpotifyRequest, Result Http.Error SpotifyAuth )
     | TracksRequest (Result Http.Error (List Tracks))
+    | PlaylistStoredRequest (Result Http.Error (List PlaylistStored))
+    | PlaylistStoredRequestDelete ( String, Result Http.Error () )
+    | DeletePlaylist String
     | DownloadPdf

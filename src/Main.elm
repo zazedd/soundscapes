@@ -3,12 +3,14 @@ port module Main exposing (init, main)
 import Admin
 import Browser
 import Browser.Navigation as Nav
+import Dashboard exposing (dashboard)
 import File.Download
 import Html exposing (div, text)
 import Http exposing (Error(..), Response(..))
 import Login exposing (submitLogin)
 import Mood exposing (mood)
 import Pdf exposing (genPdf)
+import Platform.Cmd as Cmd
 import PlaylistApi exposing (..)
 import Register exposing (submitRegister)
 import Types exposing (..)
@@ -58,14 +60,18 @@ init flags url key =
       , divvis = visibleController ()
       , playlist = Nothing
       , tracks = Nothing
+      , playlistsStored = []
       , access_token = "BQCgylLdE3S8q86WFXrv-8oYbROieadICJkFnQGsDC2ts8N0vp-xtQCy1hG4kiWO5WB-Ur95iMtRBv8tXmKOmV1ksZO7UxhoF2YTzytXKDvbmB7OuZZ1"
       , client_id = "26acd433c8d54cccac429ca13f8937da"
       , client_secret = "2a8cf2f59c29437789386aef82a0ea8f"
       , pdfBytes = Nothing
       }
     , case route_curr of
-        DashboardRoute ->
+        AdminRoute ->
             Cmd.batch [ Admin.getUsers flags.token ]
+
+        DashboardRoute ->
+            Cmd.batch [ Dashboard.get_playlists flags.token ]
 
         _ ->
             Cmd.none
@@ -77,7 +83,8 @@ route : Url.Parser.Parser (Route -> a) a
 route =
     Url.Parser.oneOf
         [ Url.Parser.map HomeRoute top
-        , Url.Parser.map DashboardRoute (s "admin")
+        , Url.Parser.map AdminRoute (s "admin")
+        , Url.Parser.map DashboardRoute (s "dashboard")
         , Url.Parser.map LoginRoute (s "login")
         , Url.Parser.map RegisterRoute (s "register")
         ]
@@ -112,7 +119,7 @@ update msg model =
             case nextRoute of
                 Just r ->
                     case r of
-                        DashboardRoute ->
+                        AdminRoute ->
                             ( { model | url = url, route = r }, Cmd.batch [ cmd, Admin.getUsers model.token ] )
 
                         _ ->
@@ -298,6 +305,21 @@ update msg model =
                 Nothing ->
                     ( model, Cmd.none )
 
+        PlaylistStoredRequest (Ok l) ->
+            ( { model | playlistsStored = l }, Cmd.none )
+
+        PlaylistStoredRequest (Err _) ->
+            ( model, Cmd.none )
+
+        PlaylistStoredRequestDelete ( id, Ok _ ) ->
+            ( { model | playlistsStored = List.filter (\a -> a.id /= id) model.playlistsStored }, Cmd.none )
+
+        PlaylistStoredRequestDelete ( _, Err _ ) ->
+            ( model, Cmd.none )
+
+        DeletePlaylist id ->
+            ( model, Dashboard.delete_playlist id model.token )
+
 
 
 -- ( model, refreshTokenRequest TracksSpotifyRequest model.client_id model.client_secret )
@@ -316,7 +338,7 @@ view model =
             HomeRoute ->
                 mood model
 
-            DashboardRoute ->
+            AdminRoute ->
                 let
                     not_found =
                         div [] [ text "Not Found!" ]
@@ -340,5 +362,8 @@ view model =
 
             NotFoundRoute ->
                 div [] [ text "Not Found!" ]
+
+            DashboardRoute ->
+                dashboard model
         ]
     }
