@@ -1,5 +1,6 @@
 module Admin exposing (..)
 
+import Common exposing (sidebar)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
@@ -128,7 +129,8 @@ tableUsers users =
 admin : Model -> Html Msg
 admin model =
     div [ class "admin-content" ]
-        [ p [ id "admintitle" ]
+        [ sidebar model
+        , p [ id "admintitle" ]
             [ text "Admin dashboard" ]
         , div
             [ class "admin-content" ]

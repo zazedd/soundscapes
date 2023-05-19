@@ -53,7 +53,7 @@ sidebar model =
             ]
         , hr [ class "divider" ] []
         , div [ class "sidebar-options" ]
-            [ a [ href "#" ]
+            [ a [ href "/" ]
                 [ span [ class "material-symbols-outlined" ] [ text "emoticon" ]
                 , span [ class "sidebar-option-text" ]
                     [ text (nbsp ++ nbsp ++ nbsp)
@@ -82,7 +82,7 @@ sidebar model =
                     , span [ id "sidebar-option-text2" ] [ text "year based" ]
                     ]
                 ]
-            , a [ href "#" ]
+            , a [ href "/dashboard" ]
                 [ span [ class "material-symbols-outlined" ]
                     [ text "dashboard" ]
                 , span [ class "sidebar-option-text" ]
@@ -92,6 +92,25 @@ sidebar model =
                     , span [ id "sidebar-option-text2" ] [ text "dashboard" ]
                     ]
                 ]
+            , case model.user of
+                Just user ->
+                    if user.role == 1 then
+                        a [ href "/admin" ]
+                            [ span [ class "material-symbols-outlined" ]
+                                [ text "dashboard" ]
+                            , span [ class "sidebar-option-text" ]
+                                [ text (nbsp ++ nbsp ++ nbsp)
+                                , text "/"
+                                , text (nbsp ++ nbsp ++ nbsp)
+                                , span [ id "sidebar-option-text2" ] [ text "admin" ]
+                                ]
+                            ]
+
+                    else
+                        div [] []
+
+                Nothing ->
+                    div [] []
             ]
         , user_login model
         ]
