@@ -3,10 +3,12 @@ port module Main exposing (init, main)
 import Admin
 import Browser
 import Browser.Navigation as Nav
+import File.Download
 import Html exposing (div, text)
 import Http exposing (Error(..), Response(..))
 import Login exposing (submitLogin)
 import Mood exposing (mood)
+import Pdf exposing (genPdf)
 import PlaylistApi exposing (..)
 import Register exposing (submitRegister)
 import Types exposing (..)
@@ -59,6 +61,7 @@ init flags url key =
       , access_token = "BQCgylLdE3S8q86WFXrv-8oYbROieadICJkFnQGsDC2ts8N0vp-xtQCy1hG4kiWO5WB-Ur95iMtRBv8tXmKOmV1ksZO7UxhoF2YTzytXKDvbmB7OuZZ1"
       , client_id = "26acd433c8d54cccac429ca13f8937da"
       , client_secret = "2a8cf2f59c29437789386aef82a0ea8f"
+      , pdfBytes = Nothing
       }
     , case route_curr of
         DashboardRoute ->
@@ -165,7 +168,7 @@ update msg model =
         DashboardUsersList r ->
             case r of
                 Ok lu ->
-                    ( { model | dashboardUsers = lu }, Cmd.none )
+                    ( { model | dashboardUsers = lu, pdfBytes = Just (Pdf.genPdf lu) }, Cmd.none )
 
                 Err _ ->
                     ( model, Cmd.none )
@@ -281,6 +284,18 @@ update msg model =
                             ( model, Cmd.none )
 
                 _ ->
+                    ( model, Cmd.none )
+
+        DownloadPdf ->
+            case model.pdfBytes of
+                Just pdfBytes ->
+                    let
+                        cmd =
+                            File.Download.bytes "Users" "application/pdf" pdfBytes
+                    in
+                    ( model, cmd )
+
+                Nothing ->
                     ( model, Cmd.none )
 
 

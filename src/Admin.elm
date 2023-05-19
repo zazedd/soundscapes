@@ -127,23 +127,36 @@ tableUsers users =
 
 admin : Model -> Html Msg
 admin model =
-    div [class "admin-content"]
+    div [ class "admin-content" ]
         [ p [ id "admintitle" ]
             [ text "Admin dashboard" ]
         , div
-            [class "admin-content"]
-            [ p [] [ text "Admins can change or delete users" ]
-            , table [class "table"]
-            [ thead [style "margin-bottom" "100px"] [ tr []
-            [ th [class "table-dark"] [ text "Id" ]
-            , th [class "table-dark"] [ text "Username" ]
-            , th [class "table-dark"] [ text "Email" ]
-            , th [class "table-dark"] [ text "Role" ]
-            , th [class "table-dark"] [ text "Update" ]
-            , th [class "table-dark"] [ text "Delete" ]
-            ]
-            ]
-            , tbody [] (tableUsers model.dashboardUsers)
+            [ class "admin-content" ]
+            [ div
+                [ style "display" "flex"
+                , style "justify-content" "center"
+                , style "align-items"
+                    "center"
+                , style
+                    "width"
+                    "100%"
+                , style "margin" "15px"
+                ]
+                [ p [ style "margin" "0" ] [ text "Admins can change or delete users" ]
+                , button [ onClick DownloadPdf, style "margin-left" "10px" ] [ text "export Pdf" ]
+                ]
+            , table [ class "table" ]
+                [ thead [ style "margin-bottom" "100px" ]
+                    [ tr []
+                        [ th [ class "table-dark" ] [ text "Id" ]
+                        , th [ class "table-dark" ] [ text "Username" ]
+                        , th [ class "table-dark" ] [ text "Email" ]
+                        , th [ class "table-dark" ] [ text "Role" ]
+                        , th [ class "table-dark" ] [ text "Update" ]
+                        , th [ class "table-dark" ] [ text "Delete" ]
+                        ]
+                    ]
+                , tbody [] (tableUsers model.dashboardUsers)
+                ]
             ]
         ]
-      ]

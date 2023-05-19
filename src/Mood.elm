@@ -1,8 +1,8 @@
 module Mood exposing (mood)
 
 import Common exposing (nbsp, sidebar)
-import Html exposing (Html, button, div, form, h1, img, input, label, option, p, select, source, span, text, video)
-import Html.Attributes exposing (autoplay, class, classList, disabled, for, height, href, id, loop, selected, src, step, style, type_, value, width)
+import Html exposing (Html, button, div, h1, img, input, label, option, p, select, source, span, text, video)
+import Html.Attributes exposing (autoplay, class, classList, disabled, for, height, id, loop, selected, src, step, style, type_, value, width)
 import Html.Attributes.Aria exposing (ariaLabel)
 import Html.Events exposing (onClick, onInput)
 import Types exposing (Model, Msg(..))
@@ -107,19 +107,17 @@ playlistShow model =
             [ div [ class "playlist-background" ] []
             , div [ class "playlist-scroll" ]
                 (List.map
-                    (\track -> 
-                      div [] [
-                        div [ style "margin" "20px" ]
-                            [ img [ src track.image, height 65, width 65 ] []
-                            , text (nbsp ++ nbsp ++ nbsp ++ nbsp)
-                            , text track.musicName
-                            , text (nbsp ++ "/" ++ nbsp)
-                            , text track.artistName
+                    (\track ->
+                        div []
+                            [ div [ style "margin" "20px" ]
+                                [ img [ src track.image, height 65, width 65 ] []
+                                , text (nbsp ++ nbsp ++ nbsp ++ nbsp)
+                                , text track.musicName
+                                , text (nbsp ++ "/" ++ nbsp)
+                                , text track.artistName
+                                ]
+                            , Html.hr [] []
                             ]
-                        , Html.hr [] []
-                        ]
-                        
-
                     )
                     tracks
                 )
