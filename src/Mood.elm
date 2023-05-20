@@ -2,7 +2,7 @@ module Mood exposing (mood)
 
 import Common exposing (nbsp, sidebar)
 import Html exposing (Html, button, div, h1, img, input, label, option, p, select, source, span, text, video)
-import Html.Attributes exposing (autoplay, class, classList, disabled, for, height, id, loop, selected, src, step, style, type_, value, width)
+import Html.Attributes exposing (autoplay, class, classList, disabled, for, height, href, id, loop, selected, src, step, style, type_, value, width)
 import Html.Attributes.Aria exposing (ariaLabel)
 import Html.Events exposing (onClick, onInput)
 import Types exposing (Model, Msg(..))
@@ -53,14 +53,18 @@ moodSelector model =
                 , ariaLabel "Pick your genre"
                 , id "genreInput"
                 , disabled model.divvis.visible1
+                , onInput
+                    (\v ->
+                        GenreUpdate v
+                    )
                 ]
-                [ option [ selected True ] [ text "Rock" ]
-                , option [ value "1" ] [ text "Electronic" ]
-                , option [ value "2" ] [ text "Jazz" ]
-                , option [ value "3" ] [ text "Pop" ]
-                , option [ value "4" ] [ text "Hip-hop" ]
-                , option [ value "5" ] [ text "Metal" ]
-                , option [ value "5" ] [ text "Indie" ]
+                [ option [ selected True, value "Rock" ] [ text "Rock" ]
+                , option [ value "Electronic" ] [ text "Electronic" ]
+                , option [ value "Jazz" ] [ text "Jazz" ]
+                , option [ value "Pop" ] [ text "Pop" ]
+                , option [ value "Hip-hop" ] [ text "Hip-hop" ]
+                , option [ value "Metal" ] [ text "Metal" ]
+                , option [ value "Indie" ] [ text "Indie" ]
                 ]
             ]
         ]
@@ -94,30 +98,53 @@ moodSelector model =
     ]
 
 
+limitText : Int -> String -> String
+limitText limit str =
+    if String.length str <= limit then
+        str
+
+    else
+        String.left limit str ++ "..."
+
+
 playlistShow : Model -> List (Html Msg)
 playlistShow model =
     case model.tracks of
         Nothing ->
-            [ div []
+            [ div [ style "padding" "30px" ]
                 [ text "Loading!"
                 ]
             ]
 
         Just tracks ->
             [ div [ class "playlist-background" ] []
+            , case model.playlist of
+                Just pl ->
+                    div [ id "playlist-name" ]
+                        [ text (limitText 40 pl.name)
+                        ]
+
+                Nothing ->
+                    div []
+                        [ text "No playlist name"
+                        ]
             , div [ class "playlist-scroll" ]
-                (List.map
+                (List.filterMap
                     (\track ->
-                        div []
-                            [ div [ style "margin" "20px" ]
-                                [ img [ src track.image, height 65, width 65 ] []
-                                , text (nbsp ++ nbsp ++ nbsp ++ nbsp)
-                                , text track.musicName
-                                , text (nbsp ++ "/" ++ nbsp)
-                                , text track.artistName
-                                ]
-                            , Html.hr [] []
-                            ]
+                        Maybe.map
+                            (\imag ->
+                                div []
+                                    [ div [ style "margin" "20px" ]
+                                        [ img [ src imag, height 65, width 65, style "border-radius" "10px" ] []
+                                        , text (nbsp ++ nbsp ++ nbsp ++ nbsp)
+                                        , Html.a [ id "track-name", href ("https://open.spotify.com/track/" ++ track.id) ] [ text track.musicName ]
+                                        , text (nbsp ++ "/" ++ nbsp)
+                                        , text track.artistName
+                                        ]
+                                    , Html.hr [] []
+                                    ]
+                            )
+                            track.image
                     )
                     tracks
                 )

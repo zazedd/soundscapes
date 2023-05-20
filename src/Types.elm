@@ -118,7 +118,7 @@ visibleController () =
 type alias Playlist =
     { name : String
     , href : String
-    , image : String
+    , image : Maybe String
     , tracksHref : String
     , songCount : Int
     }
@@ -143,7 +143,7 @@ type alias Tracks =
     { id : String
     , musicName : String
     , albumName : String
-    , image : String
+    , image : Maybe String
     , artistName : String
     }
 
@@ -156,7 +156,7 @@ decodeTracks =
                 (Json.Decode.at [ "track" ] (Json.Decode.field "href" Json.Decode.string))
                 (Json.Decode.at [ "track" ] (Json.Decode.field "name" Json.Decode.string))
                 (Json.Decode.at [ "track", "album" ] (Json.Decode.field "name" Json.Decode.string))
-                (Json.Decode.at [ "track", "album", "images", "0" ] (Json.Decode.field "url" Json.Decode.string))
+                (Json.Decode.maybe (Json.Decode.at [ "track", "album", "images", "0" ] (Json.Decode.field "url" Json.Decode.string)))
                 (Json.Decode.at [ "track", "artists", "0" ] (Json.Decode.field "name" Json.Decode.string))
             )
         )
@@ -208,6 +208,7 @@ type alias Model =
     , dashboardUsers : List User
     , token : String
     , mood : Int
+    , genre : String
     , divvis : DivVisibility
     , playlist : Maybe Playlist
     , tracks : Maybe (List Tracks)
@@ -241,6 +242,7 @@ type Msg
     | DeleteUserSubmit ( String, Result Http.Error () )
     | ToggleDiv
     | MoodUpdate Int
+    | GenreUpdate String
     | PlaylistSubmit
     | PlaylistRequest (Result Http.Error Playlist)
     | RefreshTokenRequest ( SpotifyRequest, Result Http.Error SpotifyAuth )

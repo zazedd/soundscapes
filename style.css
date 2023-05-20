@@ -135,6 +135,29 @@ body {
   color: #72afb4;
 }
 
+#track-name {
+  color: #fff;
+  font-size: 20px;
+  margin-bottom: 40px;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+#track-name:hover {
+  color: #72afb4;
+  transition: color 0.2s ease-in-out;
+}
+
+#playlist-name {
+  color: #fff;
+  font-size: 26px;
+  margin-bottom: 40px;
+  white-space: nowrap;
+  text-decoration: none;
+  text-align: center;
+  margin-top: 15px;
+}
+
 .main-content {
   margin-left: 3%;
   padding: 20px;
@@ -161,7 +184,7 @@ table {
 }
 
 .playlist {
-  background-color: #333333b0;
+  background-color: #222222b0;
   margin-top: 50px;
   margin-bottom: 50px;
   width: 50%;

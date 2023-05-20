@@ -28,8 +28,8 @@ moodSwitch mood =
             ""
 
 
-playlistRequest : String -> Int -> Cmd Msg
-playlistRequest access_token mood =
+playlistRequest : String -> Int -> String -> Cmd Msg
+playlistRequest access_token mood genre =
     Http.request
         { method = "GET"
         , headers =
@@ -38,7 +38,7 @@ playlistRequest access_token mood =
                     ++ access_token
                 )
             ]
-        , url = "https://api.spotify.com/v1/search?q=" ++ (mood |> moodSwitch) ++ "&type=playlist&market=PT&limit=30"
+        , url = "https://api.spotify.com/v1/search?q=" ++ (mood |> moodSwitch) ++ ("+" ++ genre) ++ "&type=playlist&market=PT&limit=30"
         , body = Http.emptyBody
         , expect = Http.expectJson PlaylistRequest playlistDecoder
         , timeout = Nothing
@@ -52,7 +52,7 @@ playlistDecoder =
         (Json.map5 Playlist
             (Json.field "name" Json.string)
             (Json.field "href" Json.string)
-            (Json.at [ "images", "0" ] (Json.field "url" Json.string))
+            (Json.maybe (Json.at [ "images", "0" ] (Json.field "url" Json.string)))
             (Json.at [ "tracks" ] (Json.field "href" Json.string))
             (Json.at [ "tracks" ] (Json.field "total" Json.int))
         )

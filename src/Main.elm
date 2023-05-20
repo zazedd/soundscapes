@@ -57,6 +57,7 @@ init flags url key =
       , dashboardUsers = []
       , token = flags.token
       , mood = -1
+      , genre = ""
       , divvis = visibleController ()
       , playlist = Nothing
       , tracks = Nothing
@@ -220,8 +221,15 @@ update msg model =
             , Cmd.none
             )
 
+        GenreUpdate g ->
+            ( { model
+                | genre = g
+              }
+            , Cmd.none
+            )
+
         PlaylistSubmit ->
-            ( model, playlistRequest model.access_token model.mood )
+            ( model, playlistRequest model.access_token model.mood model.genre )
 
         PlaylistRequest (Ok playlist_response) ->
             let
@@ -234,7 +242,7 @@ update msg model =
             in
             case m.playlist of
                 Nothing ->
-                    Debug.log "oh foda-se"
+                    Debug.log "playlist empty"
                         ( m, Cmd.none )
 
                 Just play ->
@@ -262,7 +270,7 @@ update msg model =
             in
             case repeat of
                 PlayListSpotifyRequest ->
-                    ( m, playlistRequest model.access_token model.mood )
+                    ( m, playlistRequest model.access_token model.mood model.genre )
 
                 TracksSpotifyRequest ->
                     case model.playlist of
