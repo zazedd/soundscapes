@@ -117,7 +117,7 @@ visibleController () =
 
 type alias Playlist =
     { name : String
-    , href : String
+    , id : String
     , image : Maybe String
     , tracksHref : String
     , songCount : Int
@@ -153,7 +153,7 @@ decodeTracks =
     Json.Decode.at [ "items" ]
         (Json.Decode.list
             (Json.Decode.map5 Tracks
-                (Json.Decode.at [ "track" ] (Json.Decode.field "href" Json.Decode.string))
+                (Json.Decode.at [ "track" ] (Json.Decode.field "id" Json.Decode.string))
                 (Json.Decode.at [ "track" ] (Json.Decode.field "name" Json.Decode.string))
                 (Json.Decode.at [ "track", "album" ] (Json.Decode.field "name" Json.Decode.string))
                 (Json.Decode.maybe (Json.Decode.at [ "track", "album", "images", "0" ] (Json.Decode.field "url" Json.Decode.string)))

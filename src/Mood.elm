@@ -26,6 +26,7 @@ moodSelector model =
                 , step "1"
                 , id "emotionalRange"
                 , disabled (not model.divvis.visible1)
+                , value "3"
                 , onInput
                     (\v ->
                         MoodUpdate
@@ -120,8 +121,19 @@ playlistShow model =
             [ div [ class "playlist-background" ] []
             , case model.playlist of
                 Just pl ->
-                    div [ id "playlist-name" ]
-                        [ text (limitText 40 pl.name)
+                    div [ id "playlist-header" ]
+                        [ Html.a [ id "playlist-name", href ("https://open.spotify.com/playlist/" ++ pl.id) ] [ text (limitText 60 pl.name) ]
+                        , div [ class "button" ]
+                          [ button [ type_ "submit", class "btn block-cube block-cube-hover", id "b" ]
+                              [ div [ class "bg-top" ]
+                                  [ div [ class "bg-inner" ] [] ]
+                              , div [ class "bg-right" ]
+                                  [ div [ class "bg-inner" ] [] ]
+                              , div [ class "bg" ]
+                                  [ div [ class "bg-inner" ] [] ]
+                              , div [ class "text" ] [ text "Save Playlist" ]
+                              ]
+                            ]
                         ]
 
                 Nothing ->
@@ -129,22 +141,30 @@ playlistShow model =
                         [ text "No playlist name"
                         ]
             , div [ class "playlist-scroll" ]
-                (List.filterMap
-                    (\track ->
-                        Maybe.map
-                            (\imag ->
-                                div []
-                                    [ div [ style "margin" "20px" ]
-                                        [ img [ src imag, height 65, width 65, style "border-radius" "10px" ] []
-                                        , text (nbsp ++ nbsp ++ nbsp ++ nbsp)
-                                        , Html.a [ id "track-name", href ("https://open.spotify.com/track/" ++ track.id) ] [ text track.musicName ]
-                                        , text (nbsp ++ "/" ++ nbsp)
-                                        , text track.artistName
+                (List.indexedMap
+                    (\index track ->
+                        Maybe.withDefault (div [] [])
+                            (Maybe.map
+                                (\imag ->
+                                    div []
+                                        [ div [ style "display" "flex", style "align-items" "center", style "margin" "20px" ]
+                                            [ div [ style "text-align" "right", style "margin-right" "10px" ]
+                                                [ text (String.fromInt (index + 1) ++ nbsp ++ nbsp ++ nbsp)
+                                                ]
+                                            , img [ src imag, height 65, width 65, style "border-radius" "10px" ] []
+                                            , div [ class "track-space" ]
+                                                [ Html.a [ id "track-name", href ("https://open.spotify.com/track/" ++ track.id) ] [ text track.musicName ]
+                                                , span [ id "artist-name" ]
+                                                    [ text ("-" ++ nbsp)
+                                                    , text track.artistName
+                                                    ]
+                                                ]
+                                            ]
+                                        , Html.hr [] []
                                         ]
-                                    , Html.hr [] []
-                                    ]
+                                )
+                                track.image
                             )
-                            track.image
                     )
                     tracks
                 )

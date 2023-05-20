@@ -51,7 +51,7 @@ playlistDecoder =
     Json.at [ "playlists", "items", "0" ]
         (Json.map5 Playlist
             (Json.field "name" Json.string)
-            (Json.field "href" Json.string)
+            (Json.field "id" Json.string)
             (Json.maybe (Json.at [ "images", "0" ] (Json.field "url" Json.string)))
             (Json.at [ "tracks" ] (Json.field "href" Json.string))
             (Json.at [ "tracks" ] (Json.field "total" Json.int))

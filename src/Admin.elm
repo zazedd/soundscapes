@@ -145,7 +145,7 @@ admin model =
                 , style "margin" "15px"
                 ]
                 [ p [ style "margin" "0" ] [ text "Admins can change or delete users" ]
-                , button [ onClick DownloadPdf, style "margin-left" "10px" ] [ text "export Pdf" ]
+                , button [ class "btn btn-primary", onClick DownloadPdf, style "margin-left" "10px" ] [ text "Export Pdf" ]
                 ]
             , table [ class "table" ]
                 [ thead [ style "margin-bottom" "100px" ]
