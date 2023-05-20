@@ -252,6 +252,8 @@ table {
   margin-left: 20px;
   display: grid;
   overflow: hidden;
+  opacity: 1;
+  transition: opacity 1s ease-in-oute;
 }
 
 #track-name {
@@ -270,14 +272,16 @@ table {
 
 #playlist-header {
   display: flex;
+  align-items: left;
   margin-bottom: 40px;
   margin-left: 20px;
   white-space: nowrap;
   margin-top: 15px;
 }
 
-#playlist-header button {
-  margin-left: 230%;
+#playlist-header .button {
+  margin-left: auto;
+  margin-right: 25px;
   margin-top: 10px;
 }
 
@@ -562,10 +566,5 @@ input[type="range"]:focus::-ms-fill-upper {
 
   .buttons {
     margin-top: -300px;
-  }
-
-  #playlist-header button {
-    margin-left: 20%;
-    margin-top: 10px;
   }
 }
