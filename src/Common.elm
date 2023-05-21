@@ -96,7 +96,7 @@ sidebar model =
                 ]
             , a [ href "/name" ]
                 [ span [ class "material-symbols-outlined" ]
-                    [ text "calendar_month" ]
+                    [ text "search" ]
                 , span [ class "sidebar-option-text" ]
                     [ text (nbsp ++ nbsp ++ nbsp)
                     , text "/"
