@@ -102,7 +102,7 @@ sidebar model =
                                 [ text (nbsp ++ nbsp ++ nbsp)
                                 , text "/"
                                 , text (nbsp ++ nbsp ++ nbsp)
-                                , span [ id "sidebar-option-text2" ] [ text "admin" ]
+                                , span [ id "sidebar-option-text2" ] [ text "admin dashboard" ]
                                 ]
                             ]
 
