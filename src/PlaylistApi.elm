@@ -89,3 +89,21 @@ refreshTokenRequest spoty client_id client_secret =
         , timeout = Nothing
         , tracker = Nothing
         }
+
+
+playlistRequestName : Model -> String -> String -> Cmd Msg
+playlistRequestName model access_token name =
+    Http.request
+        { method = "GET"
+        , headers =
+            [ Http.header "Authorization"
+                ("Bearer "
+                    ++ access_token
+                )
+            ]
+        , url = "https://api.spotify.com/v1/search?q=" ++ (name) ++ "&type=playlist&market=PT&limit=30"
+        , body = Http.emptyBody
+        , expect = Http.expectJson PlaylistRequest (playlistDecoder model)
+        , timeout = Nothing
+        , tracker = Nothing
+        }

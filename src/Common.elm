@@ -1,9 +1,31 @@
 module Common exposing (..)
 
-import Html exposing (Html, a, div, hr, img, span, text)
-import Html.Attributes exposing (class, href, id, src, style)
-import Types exposing (Model, Msg)
+import Html exposing (..)
+import Html.Attributes exposing (..)
+import Html.Events exposing (..)
+import Http
+import Json.Encode
+import Types exposing (..)
 import VitePluginHelper
+
+
+storePlaylist : String -> String -> String -> Cmd Msg
+storePlaylist name url token =
+    Http.request
+        { method = "POST"
+        , url = "http://localhost:3000/playlists"
+        , headers = [ Http.header "auth" token ]
+        , body =
+            Http.jsonBody
+                (Json.Encode.object
+                    [ ( "name", Json.Encode.string name )
+                    , ( "url", Json.Encode.string url )
+                    ]
+                )
+        , expect = Http.expectWhatever PlaylistStoreRequest
+        , timeout = Nothing
+        , tracker = Nothing
+        }
 
 
 nbsp : String
@@ -72,14 +94,14 @@ sidebar model =
                     , span [ id "sidebar-option-text2" ] [ text "song based" ]
                     ]
                 ]
-            , a [ href "#" ]
+            , a [ href "/name" ]
                 [ span [ class "material-symbols-outlined" ]
                     [ text "calendar_month" ]
                 , span [ class "sidebar-option-text" ]
                     [ text (nbsp ++ nbsp ++ nbsp)
                     , text "/"
                     , text (nbsp ++ nbsp ++ nbsp)
-                    , span [ id "sidebar-option-text2" ] [ text "year based" ]
+                    , span [ id "sidebar-option-text2" ] [ text "name based" ]
                     ]
                 ]
             , a [ href "/dashboard" ]
@@ -114,3 +136,94 @@ sidebar model =
             ]
         , user_login model
         ]
+
+
+limitText : Int -> String -> String
+limitText limit str =
+    if String.length str <= limit then
+        str
+
+    else
+        String.left limit str ++ "..."
+
+
+playlistShow : Model -> List (Html Msg)
+playlistShow model =
+    case model.tracks of
+        Nothing ->
+            [ div [ style "padding" "30px" ]
+                [ text "Loading!"
+                ]
+            ]
+
+        Just tracks ->
+            [ div [ class "playlist-background" ] []
+            , case model.playlist of
+                Just pl ->
+                    div [ id "playlist-header" ]
+                        [ Html.a [ id "playlist-name", href ("https://open.spotify.com/playlist/" ++ pl.id) ] [ text (limitText 60 pl.name) ]
+                        , div [ class "buttons" ]
+                            [ div [ class "button" ]
+                                [ case model.user of
+                                    Just _ ->
+                                        button [ type_ "submit", onClick PlaylistStoreSubmit, class "btn block-cube block-cube-hover", id "b" ]
+                                            [ div [ class "bg-top" ]
+                                                [ div [ class "bg-inner" ] [] ]
+                                            , div [ class "bg-right" ]
+                                                [ div [ class "bg-inner" ] [] ]
+                                            , div [ class "bg" ]
+                                                [ div [ class "bg-inner" ] [] ]
+                                            , div [ class "text" ] [ text "Save Playlist" ]
+                                            ]
+
+                                    Nothing ->
+                                        div [] []
+                                , div [ class "button" ]
+                                    [ button [ type_ "submit", onClick RestorePlaylist, class "btn block-cube block-cube-hover", id "b" ]
+                                        [ div [ class "bg-top" ]
+                                            [ div [ class "bg-inner" ] [] ]
+                                        , div [ class "bg-right" ]
+                                            [ div [ class "bg-inner" ] [] ]
+                                        , div [ class "bg" ]
+                                            [ div [ class "bg-inner" ] [] ]
+                                        , div [ class "text" ] [ text "Go Back" ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+
+                Nothing ->
+                    div []
+                        [ text "No playlist name"
+                        ]
+            , Html.hr [] []
+            , div [ class "playlist-scroll" ]
+                (List.indexedMap
+                    (\index track ->
+                        Maybe.withDefault (div [] [])
+                            (Maybe.map
+                                (\imag ->
+                                    div []
+                                        [ div [ style "display" "flex", style "align-items" "center", style "margin" "20px" ]
+                                            [ div [ style "text-align" "right", style "margin-right" "10px" ]
+                                                [ text (String.fromInt (index + 1) ++ nbsp ++ nbsp ++ nbsp)
+                                                ]
+                                            , img [ src imag, height 65, width 65, style "border-radius" "10px" ] []
+                                            , div [ class "track-space" ]
+                                                [ Html.a [ id "track-name", href ("https://open.spotify.com/track/" ++ track.id) ] [ text track.musicName ]
+                                                , span [ id "artist-name" ]
+                                                    [ text ("-" ++ nbsp)
+                                                    , text track.artistName
+                                                    ]
+                                                ]
+                                            ]
+                                        , Html.hr [ class "divider" ] []
+                                        ]
+                                )
+                                track.image
+                            )
+                    )
+                    tracks
+                )
+            ]

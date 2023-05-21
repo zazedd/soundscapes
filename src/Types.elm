@@ -12,6 +12,7 @@ import Url
 
 type Route
     = HomeRoute
+    | NameRoute
     | AdminRoute
     | DashboardRoute
     | LoginRoute
@@ -210,6 +211,7 @@ type alias Model =
     , token : String
     , mood : Int
     , genre : String
+    , name : String
     , randomInt : Int
     , divvis : DivVisibility
     , playlist : Maybe Playlist
@@ -244,9 +246,11 @@ type Msg
     | DeleteUserSubmit ( String, Result Http.Error () )
     | ToggleDiv
     | MoodUpdate Int
+    | NameUpdate String
     | GenreUpdate String
     | RandomInt Int
     | PlaylistSubmit
+    | PlaylistSubmitName
     | PlaylistRequest (Result Http.Error Playlist)
     | RefreshTokenRequest ( SpotifyRequest, Result Http.Error SpotifyAuth )
     | TracksRequest (Result Http.Error (List Tracks))

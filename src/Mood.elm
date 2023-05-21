@@ -1,4 +1,4 @@
-module Mood exposing (mood, storePlaylist)
+module Mood exposing (mood)
 
 import Common exposing (nbsp, sidebar)
 import Html exposing (Html, button, div, h1, img, input, label, option, p, select, source, span, text, video)
@@ -9,24 +9,6 @@ import Http
 import Json.Encode
 import Types exposing (Model, Msg(..))
 
-
-storePlaylist : String -> String -> String -> Cmd Msg
-storePlaylist name url token =
-    Http.request
-        { method = "POST"
-        , url = "http://localhost:3000/playlists"
-        , headers = [ Http.header "auth" token ]
-        , body =
-            Http.jsonBody
-                (Json.Encode.object
-                    [ ( "name", Json.Encode.string name )
-                    , ( "url", Json.Encode.string url )
-                    ]
-                )
-        , expect = Http.expectWhatever PlaylistStoreRequest
-        , timeout = Nothing
-        , tracker = Nothing
-        }
 
 
 moodSelector : Model -> List (Html Msg)

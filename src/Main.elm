@@ -9,7 +9,9 @@ import Html exposing (div, text)
 import Http exposing (Error(..), Response(..))
 import Login exposing (submitLogin)
 import Mood exposing (mood)
+import Name exposing (name)
 import Pdf exposing (genPdf)
+import Common exposing (..)
 import Platform.Cmd as Cmd
 import PlaylistApi exposing (..)
 import Random exposing (..)
@@ -59,6 +61,7 @@ init flags url key =
       , token = flags.token
       , mood = 5
       , genre = "Rock"
+      , name = ""
       , randomInt = 0
       , divvis = visibleController ()
       , playlist = Nothing
@@ -86,6 +89,7 @@ route : Url.Parser.Parser (Route -> a) a
 route =
     Url.Parser.oneOf
         [ Url.Parser.map HomeRoute top
+        , Url.Parser.map NameRoute (s "name")
         , Url.Parser.map AdminRoute (s "admin")
         , Url.Parser.map DashboardRoute (s "dashboard")
         , Url.Parser.map LoginRoute (s "login")
@@ -226,6 +230,13 @@ update msg model =
             , Cmd.none
             )
 
+        NameUpdate m ->
+            ( { model
+                | name = m
+              }
+            , Cmd.none
+            )
+
         GenreUpdate g ->
             ( { model
                 | genre = g
@@ -238,6 +249,9 @@ update msg model =
 
         PlaylistSubmit ->
             ( model, playlistRequest model model.access_token model.mood model.genre )
+
+        PlaylistSubmitName ->
+            ( model, playlistRequestName model model.access_token model.name )
 
         PlaylistRequest (Ok playlist_response) ->
             let
@@ -346,7 +360,7 @@ update msg model =
                         url =
                             "https://open.spotify.com/track/" ++ p.id
                     in
-                    ( model, Mood.storePlaylist p.name url model.token )
+                    ( model, Common.storePlaylist p.name url model.token )
 
         PlaylistStoreRequest _ ->
             ( model, Cmd.none )
@@ -371,6 +385,9 @@ view model =
         [ case model.route of
             HomeRoute ->
                 mood model
+
+            NameRoute ->
+                name model
 
             AdminRoute ->
                 let
