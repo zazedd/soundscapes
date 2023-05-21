@@ -1,6 +1,6 @@
 module Mood exposing (mood)
 
-import Common exposing (nbsp, sidebar)
+import Common exposing (..)
 import Html exposing (Html, button, div, h1, img, input, label, option, p, select, source, span, text, video)
 import Html.Attributes exposing (autoplay, class, classList, disabled, for, height, href, id, loop, src, step, style, type_, value, width)
 import Html.Attributes.Aria exposing (ariaLabel)
@@ -100,96 +100,6 @@ moodSelector model =
         ]
     ]
 
-
-limitText : Int -> String -> String
-limitText limit str =
-    if String.length str <= limit then
-        str
-
-    else
-        String.left limit str ++ "..."
-
-
-playlistShow : Model -> List (Html Msg)
-playlistShow model =
-    case model.tracks of
-        Nothing ->
-            [ div [ style "padding" "30px" ]
-                [ text "Loading!"
-                ]
-            ]
-
-        Just tracks ->
-            [ div [ class "playlist-background" ] []
-            , case model.playlist of
-                Just pl ->
-                    div [ id "playlist-header" ]
-                        [ Html.a [ id "playlist-name", href ("https://open.spotify.com/playlist/" ++ pl.id) ] [ text (limitText 60 pl.name) ]
-                        , div [ class "buttons" ] [
-                           div [ class "button" ]
-                              [ case model.user of 
-                                  Just _ ->
-                                      button [ type_ "submit", onClick PlaylistStoreSubmit, class "btn block-cube block-cube-hover", id "b" ]
-                                        [ div [ class "bg-top" ]
-                                            [ div [ class "bg-inner" ] [] ]
-                                        , div [ class "bg-right" ]
-                                            [ div [ class "bg-inner" ] [] ]
-                                        , div [ class "bg" ]
-                                            [ div [ class "bg-inner" ] [] ]
-                                        , div [ class "text" ] [ text "Save Playlist" ]
-                                        ]
-
-                                  Nothing -> 
-                                    div [] [] 
-                                , div [ class "button" ]
-                                    [ button [ type_ "submit", onClick RestorePlaylist, class "btn block-cube block-cube-hover", id "b" ]
-                                        [ div [ class "bg-top" ]
-                                            [ div [ class "bg-inner" ] [] ]
-                                        , div [ class "bg-right" ]
-                                            [ div [ class "bg-inner" ] [] ]
-                                        , div [ class "bg" ]
-                                            [ div [ class "bg-inner" ] [] ]
-                                        , div [ class "text" ] [ text "Go Back" ]
-                                        ]
-                                    ]
-                                ]
-                          ]
-                        ]
-
-                Nothing ->
-                    div []
-                        [ text "No playlist name"
-                        ]
-            , Html.hr [] []
-            , div [ class "playlist-scroll" ]
-                (List.indexedMap
-                    (\index track ->
-                        Maybe.withDefault (div [] [])
-                            (Maybe.map
-                                (\imag ->
-                                    div []
-                                        [ div [ style "display" "flex", style "align-items" "center", style "margin" "20px" ]
-                                            [ div [ style "text-align" "right", style "margin-right" "10px" ]
-                                                [ text (String.fromInt (index + 1) ++ nbsp ++ nbsp ++ nbsp)
-                                                ]
-                                            , img [ src imag, height 65, width 65, style "border-radius" "10px" ] []
-                                            , div [ class "track-space" ]
-                                                [ Html.a [ id "track-name", href ("https://open.spotify.com/track/" ++ track.id) ] [ text track.musicName ]
-                                                , span [ id "artist-name" ]
-                                                    [ text ("-" ++ nbsp)
-                                                    , text track.artistName
-                                                    ]
-                                                ]
-                                            ]
-                                        , Html.hr [ class "divider" ] []
-                                        ]
-                                )
-                                track.image
-                            )
-                    )
-                    tracks
-                )
-            ]
 
 
 mood : Model -> Html Msg

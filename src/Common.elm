@@ -162,22 +162,23 @@ playlistShow model =
                 Just pl ->
                     div [ id "playlist-header" ]
                         [ Html.a [ id "playlist-name", href ("https://open.spotify.com/playlist/" ++ pl.id) ] [ text (limitText 60 pl.name) ]
-                        , div [ class "buttons" ]
-                            [ div [ class "button" ]
-                                [ case model.user of
+                          , div [ class "buttons" ]
+                                [ div [ class "button" ] [
+                                  case model.user of
                                     Just _ ->
-                                        button [ type_ "submit", onClick PlaylistStoreSubmit, class "btn block-cube block-cube-hover", id "b" ]
-                                            [ div [ class "bg-top" ]
-                                                [ div [ class "bg-inner" ] [] ]
-                                            , div [ class "bg-right" ]
-                                                [ div [ class "bg-inner" ] [] ]
-                                            , div [ class "bg" ]
-                                                [ div [ class "bg-inner" ] [] ]
-                                            , div [ class "text" ] [ text "Save Playlist" ]
-                                            ]
+                                             button [ type_ "submit", onClick PlaylistStoreSubmit, class "btn block-cube block-cube-hover", id "b" ]
+                                                [ div [ class "bg-top" ]
+                                                    [ div [ class "bg-inner" ] [] ]
+                                                , div [ class "bg-right" ]
+                                                    [ div [ class "bg-inner" ] [] ]
+                                                , div [ class "bg" ]
+                                                    [ div [ class "bg-inner" ] [] ]
+                                                , div [ class "text" ] [ text "Save Playlist" ]
+                                                ]
 
                                     Nothing ->
-                                        div [] []
+                                         div [] [] 
+                                ]
                                 , div [ class "button" ]
                                     [ button [ type_ "submit", onClick RestorePlaylist, class "btn block-cube block-cube-hover", id "b" ]
                                         [ div [ class "bg-top" ]
@@ -190,7 +191,6 @@ playlistShow model =
                                         ]
                                     ]
                                 ]
-                            ]
                         ]
 
                 Nothing ->
