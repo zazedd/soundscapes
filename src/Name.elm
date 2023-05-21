@@ -12,7 +12,7 @@ import Types exposing (Model, Msg(..))
 nameSelector : Model -> List (Html Msg)
 nameSelector model =
     [ div [ classList [ ( "select-div", True ), ( "visible", model.divvis.visible1 ) ] ]
-        [ p [ style "margin-bottom" "55px"] [ text "What name would you like to search for?" ]
+        [ p [ style "margin-bottom" "45px"] [ text "What name would you like to search for?" ]
         , div [ class "mb-3" ]
             [ input
                 [ class "form-control"
@@ -26,7 +26,7 @@ nameSelector model =
                 ] []
             ]
         ]
-    , div [ class "form", style "margin-top" "-30px", style "margin-bottom" "auto", style "width" "150px" ]
+    , div [ class "form", style "margin-top" "-20px", style "margin-bottom" "auto", style "width" "150px" ]
          [ div [ class "button" ]
                 [ button [ onClick PlaylistSubmitName, type_ "submit", class "btn block-cube block-cube-hover", id "b" ]
                     [ div [ class "bg-top" ]
