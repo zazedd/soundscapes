@@ -147,13 +147,24 @@ body {
   align-items: center;
 }
 
+.sidebar:hover ~ .main-content {
+  filter: blur(5px);
+}
+
 .admin-content {
+  background-color: #111;
   padding: 20px;
   height: 100vh;
   display: flex;
+  filter: blur(0);
+  transition: filter 0.5s ease;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.sidebar:hover ~ .admin-content {
+  filter: blur(5px);
 }
 
 table {
@@ -171,10 +182,6 @@ table {
 
 .playlist text {
   margin-left: 40px;
-}
-
-.dashboard:hover ~ .main-content {
-  filter: blur(5px);
 }
 
 #title {
@@ -248,6 +255,27 @@ table {
   text-align: right;
 }
 
+.dashboard-content {
+  background-color: #111;
+  margin-left: 3%;
+  padding: 20px;
+  height: 100vh;
+  filter: blur(0);
+  transition: filter 0.5s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.sidebar:hover ~ .dashboard-content {
+  filter: blur(5px);
+}
+
+#pls-login {
+  margin: auto;
+}
+
 .track-space {
   margin-left: 20px;
   display: grid;
@@ -273,7 +301,7 @@ table {
 #playlist-header {
   display: flex;
   align-items: left;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   margin-left: 20px;
   white-space: nowrap;
   margin-top: 15px;

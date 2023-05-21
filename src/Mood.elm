@@ -26,7 +26,6 @@ moodSelector model =
                 , step "1"
                 , id "emotionalRange"
                 , disabled (not model.divvis.visible1)
-                , value "3"
                 , onInput
                     (\v ->
                         MoodUpdate
@@ -140,6 +139,8 @@ playlistShow model =
                     div []
                         [ text "No playlist name"
                         ]
+
+            , Html.hr [ ] []
             , div [ class "playlist-scroll" ]
                 (List.indexedMap
                     (\index track ->
@@ -160,7 +161,7 @@ playlistShow model =
                                                     ]
                                                 ]
                                             ]
-                                        , Html.hr [] []
+                                        , Html.hr [ class "divider" ] []
                                         ]
                                 )
                                 track.image

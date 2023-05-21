@@ -128,37 +128,39 @@ tableUsers users =
 
 admin : Model -> Html Msg
 admin model =
-    div [ class "admin-content" ]
+    div []
         [ sidebar model
-        , p [ id "admintitle" ]
-            [ text "Admin dashboard" ]
-        , div
-            [ class "admin-content" ]
-            [ div
-                [ style "display" "flex"
-                , style "justify-content" "center"
-                , style "align-items"
-                    "center"
-                , style
-                    "width"
-                    "100%"
-                , style "margin" "15px"
-                ]
-                [ p [ style "margin" "0" ] [ text "Admins can change or delete users" ]
-                , button [ class "btn btn-primary", onClick DownloadPdf, style "margin-left" "10px" ] [ text "Export Pdf" ]
-                ]
-            , table [ class "table" ]
-                [ thead [ style "margin-bottom" "100px" ]
-                    [ tr []
-                        [ th [ class "table-dark" ] [ text "Id" ]
-                        , th [ class "table-dark" ] [ text "Username" ]
-                        , th [ class "table-dark" ] [ text "Email" ]
-                        , th [ class "table-dark" ] [ text "Role" ]
-                        , th [ class "table-dark" ] [ text "Update" ]
-                        , th [ class "table-dark" ] [ text "Delete" ]
-                        ]
+        , div [ class "admin-content" ]
+            [ p [ id "admintitle" ]
+                [ text "Admin dashboard" ]
+            , div
+                [ class "admin-content" ]
+                [ div
+                    [ style "display" "flex"
+                    , style "justify-content" "center"
+                    , style "align-items"
+                        "center"
+                    , style
+                        "width"
+                        "100%"
+                    , style "margin" "15px"
                     ]
-                , tbody [] (tableUsers model.dashboardUsers)
+                    [ p [ style "margin" "0" ] [ text "Admins can change or delete users" ]
+                    , button [ class "btn btn-primary", onClick DownloadPdf, style "margin-left" "10px" ] [ text "Export Pdf" ]
+                    ]
+                , table [ class "table" ]
+                    [ thead [ style "margin-bottom" "100px" ]
+                        [ tr []
+                            [ th [ class "table-dark" ] [ text "Id" ]
+                            , th [ class "table-dark" ] [ text "Username" ]
+                            , th [ class "table-dark" ] [ text "Email" ]
+                            , th [ class "table-dark" ] [ text "Role" ]
+                            , th [ class "table-dark" ] [ text "Update" ]
+                            , th [ class "table-dark" ] [ text "Delete" ]
+                            ]
+                        ]
+                    , tbody [] (tableUsers model.dashboardUsers)
+                    ]
                 ]
             ]
         ]
