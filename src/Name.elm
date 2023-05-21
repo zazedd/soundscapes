@@ -1,8 +1,8 @@
 module Name exposing (name)
 
 import Common exposing (..)
-import Html exposing (Html, button, div, h1, img, input, label, option, p, select, source, span, text, video)
-import Html.Attributes exposing (autoplay, class, classList, disabled, for, height, href, id, loop, src, step, style, type_, value, width)
+import Html exposing (Html, button, div, h1, input, p, source, text, video)
+import Html.Attributes exposing (autoplay, class, classList, disabled, id, loop, src, style, type_)
 import Html.Attributes.Aria exposing (ariaLabel)
 import Html.Events exposing (onClick, onInput)
 import Types exposing (Model, Msg(..))

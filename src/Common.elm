@@ -84,16 +84,16 @@ sidebar model =
                     , span [ id "sidebar-option-text2" ] [ text "mood based" ]
                     ]
                 ]
-            , a [ href "#" ]
-                [ span [ class "material-symbols-outlined" ]
-                    [ text "music_note" ]
-                , span [ class "sidebar-option-text" ]
-                    [ text (nbsp ++ nbsp ++ nbsp)
-                    , text "/"
-                    , text (nbsp ++ nbsp ++ nbsp)
-                    , span [ id "sidebar-option-text2" ] [ text "song based" ]
-                    ]
-                ]
+            -- , a [ href "#" ]
+            --     [ span [ class "material-symbols-outlined" ]
+            --         [ text "music_note" ]
+            --     , span [ class "sidebar-option-text" ]
+            --         [ text (nbsp ++ nbsp ++ nbsp)
+            --         , text "/"
+            --         , text (nbsp ++ nbsp ++ nbsp)
+            --         , span [ id "sidebar-option-text2" ] [ text "song based" ]
+            --         ]
+            --     ]
             , a [ href "/name" ]
                 [ span [ class "material-symbols-outlined" ]
                     [ text "search" ]
