@@ -2,7 +2,7 @@ module Login exposing (..)
 
 import Dict
 import Html exposing (Html, button, div, form, h1, input, source, text, video)
-import Html.Attributes exposing (action, autocomplete, autoplay, class, id, loop, name, placeholder, src, type_)
+import Html.Attributes exposing (action, autocomplete, autoplay, class, id, loop, name, placeholder, src, style, type_)
 import Html.Events exposing (onInput, onSubmit)
 import Http exposing (Error, Response(..))
 import Json.Decode
@@ -57,6 +57,13 @@ login model =
             [ div [ class "control" ]
                 [ h1 [] [ text "Login" ]
                 ]
+            , if model.errMsg /= "" then
+                div [ style "margin-bottom" "25px", style "color" "red" ]
+                    [ text model.errMsg
+                    ]
+
+              else
+                div [] []
             , div [ class "control block-cube block-input" ]
                 [ input
                     [ name "email"

@@ -207,6 +207,7 @@ type alias Model =
     , login : Login
     , register : Register
     , user : Maybe User
+    , errMsg : String
     , dashboardUsers : List User
     , token : String
     , mood : Int
@@ -215,6 +216,7 @@ type alias Model =
     , randomInt : Int
     , divvis : DivVisibility
     , playlist : Maybe Playlist
+    , playlistBeforeChoosing : List Playlist
     , tracks : Maybe (List Tracks)
     , access_token : String
     , client_id : String
@@ -251,7 +253,7 @@ type Msg
     | RandomInt Int
     | PlaylistSubmit
     | PlaylistSubmitName
-    | PlaylistRequest (Result Http.Error Playlist)
+    | PlaylistRequest (Result Http.Error (List Playlist))
     | RefreshTokenRequest ( SpotifyRequest, Result Http.Error SpotifyAuth )
     | TracksRequest (Result Http.Error (List Tracks))
     | PlaylistStoredRequest (Result Http.Error (List PlaylistStored))
@@ -261,3 +263,5 @@ type Msg
     | PlaylistStoreRequest (Result Http.Error ())
     | RestorePlaylist
     | DownloadPdf
+    | LogoutSubmit
+    | LogoutRequest (Result Http.Error ())

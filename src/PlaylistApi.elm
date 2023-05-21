@@ -41,22 +41,35 @@ playlistRequest model access_token mood genre =
             ]
         , url = "https://api.spotify.com/v1/search?q=" ++ (mood |> moodSwitch) ++ ("+" ++ genre) ++ "&type=playlist&market=PT&limit=30"
         , body = Http.emptyBody
-        , expect = Http.expectJson PlaylistRequest (playlistDecoder model)
+        , expect = Http.expectJson PlaylistRequest playlistDecoder
         , timeout = Nothing
         , tracker = Nothing
         }
 
 
-playlistDecoder : Model -> Json.Decoder Playlist
-playlistDecoder model =
-    Json.at [ "playlists", "items", model.randomInt |> String.fromInt ]
-        (Json.map5 Playlist
-            (Json.field "name" Json.string)
-            (Json.field "id" Json.string)
-            (Json.maybe (Json.at [ "images", "0" ] (Json.field "url" Json.string)))
-            (Json.at [ "tracks" ] (Json.field "href" Json.string))
-            (Json.at [ "tracks" ] (Json.field "total" Json.int))
+playlistDecoder : Json.Decoder (List Playlist)
+playlistDecoder =
+    Json.at [ "playlists", "items" ]
+        (Json.list
+            (Json.map5 Playlist
+                (Json.field "name" Json.string)
+                (Json.field "id" Json.string)
+                (Json.maybe (Json.at [ "images", "0" ] (Json.field "url" Json.string)))
+                (Json.at [ "tracks" ] (Json.field "href" Json.string))
+                (Json.at [ "tracks" ] (Json.field "total" Json.int))
+            )
         )
+
+
+
+-- Json.at [ "playlists", "items", model.randomInt |> String.fromInt ]
+--     (Json.map5 Playlist
+--         (Json.field "name" Json.string)
+--         (Json.field "id" Json.string)
+--         (Json.maybe (Json.at [ "images", "0" ] (Json.field "url" Json.string)))
+--         (Json.at [ "tracks" ] (Json.field "href" Json.string))
+--         (Json.at [ "tracks" ] (Json.field "total" Json.int))
+--     )
 
 
 tracksRequest : String -> String -> Cmd Msg
@@ -103,7 +116,7 @@ playlistRequestName model access_token name =
             ]
         , url = "https://api.spotify.com/v1/search?q=" ++ name ++ "&type=playlist&market=PT&limit=30"
         , body = Http.emptyBody
-        , expect = Http.expectJson PlaylistRequest (playlistDecoder model)
+        , expect = Http.expectJson PlaylistRequest playlistDecoder
         , timeout = Nothing
         , tracker = Nothing
         }

@@ -3,15 +3,15 @@ port module Main exposing (init, main)
 import Admin
 import Browser
 import Browser.Navigation as Nav
+import Common exposing (..)
 import Dashboard exposing (dashboard)
 import File.Download
 import Html exposing (div, text)
-import Http exposing (Error(..), Response(..))
+import Http exposing (Error(..), Response(..), emptyBody)
 import Login exposing (submitLogin)
 import Mood exposing (mood)
 import Name exposing (name)
 import Pdf exposing (genPdf)
-import Common exposing (..)
 import Platform.Cmd as Cmd
 import PlaylistApi exposing (..)
 import Random exposing (..)
@@ -62,9 +62,11 @@ init flags url key =
       , mood = 5
       , genre = "Rock"
       , name = ""
+      , errMsg = ""
       , randomInt = 0
       , divvis = visibleController ()
       , playlist = Nothing
+      , playlistBeforeChoosing = []
       , tracks = Nothing
       , playlistsStored = []
       , access_token = "BQCgylLdE3S8q86WFXrv-8oYbROieadICJkFnQGsDC2ts8N0vp-xtQCy1hG4kiWO5WB-Ur95iMtRBv8tXmKOmV1ksZO7UxhoF2YTzytXKDvbmB7OuZZ1"
@@ -101,6 +103,35 @@ port setStorage : String -> Cmd msg
 
 
 port getStorage : (String -> msg) -> Sub msg
+
+
+port removeItem : () -> Cmd msg
+
+
+errMsg : Http.Error -> Int -> String -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
+errMsg e status msg ( model, cmd ) =
+    case e of
+        BadStatus s ->
+            if status == s then
+                ( { model | errMsg = msg }, Cmd.none )
+
+            else
+                ( model, Cmd.none )
+
+        NetworkError ->
+            ( { model | errMsg = msg }, Cmd.none )
+
+        _ ->
+            ( model, Cmd.none )
+
+
+logout : () -> Cmd.Cmd Msg
+logout () =
+    Http.post
+        { url = "http://localhost:3000/login"
+        , body = emptyBody
+        , expect = Http.expectWhatever LogoutRequest
+        }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -161,10 +192,13 @@ update msg model =
             in
             -- Debug.log
             --     token
-            ( { model | login = initLogin (), user = Just user, token = token }, Cmd.batch cmds )
+            ( { model | login = initLogin (), user = Just user, token = token, errMsg = "" }, Cmd.batch cmds )
 
-        LoginSubmitHttp (Err _) ->
-            ( model, Cmd.none )
+        LoginSubmitHttp (Err e) ->
+            errMsg e
+                500
+                "Login failed!"
+                ( model, Cmd.none )
 
         RegisterUpdate r ->
             ( { model | register = r }, Cmd.none )
@@ -177,10 +211,13 @@ update msg model =
                 cmds =
                     Nav.pushUrl model.key "/login"
             in
-            ( model, cmds )
+            ( { model | errMsg = "" }, cmds )
 
-        RegisterSubmitHttp (Err _) ->
-            ( model, Cmd.none )
+        RegisterSubmitHttp (Err e) ->
+            errMsg e
+                500
+                "User already exists!"
+                ( model, Cmd.none )
 
         DashboardUsersList r ->
             case r of
@@ -221,7 +258,7 @@ update msg model =
             ( model, Cmd.none )
 
         ToggleDiv ->
-            ( { model | divvis = { visible1 = not model.divvis.visible1, visible2 = not model.divvis.visible2 } }, Random.generate RandomInt (Random.int 1 30) )
+            ( { model | divvis = { visible1 = not model.divvis.visible1, visible2 = not model.divvis.visible2 } }, Cmd.none )
 
         MoodUpdate m ->
             ( { model
@@ -245,7 +282,21 @@ update msg model =
             )
 
         RandomInt x ->
-            ( { model | randomInt = x }, Cmd.none )
+            let
+                playlist =
+                    nth model.playlistBeforeChoosing x
+            in
+            let
+                m =
+                    { model | randomInt = x }
+            in
+            case playlist of
+                Nothing ->
+                    Debug.log "playlist empty"
+                        ( m, Cmd.none )
+
+                Just play ->
+                    ( { m | playlist = Just play }, tracksRequest model.access_token play.tracksHref )
 
         PlaylistSubmit ->
             ( model, playlistRequest model model.access_token model.mood model.genre )
@@ -260,15 +311,13 @@ update msg model =
             in
             let
                 m =
-                    { model | playlist = Just playlist_response, divvis = divv }
+                    { model | playlistBeforeChoosing = playlist_response, divvis = divv }
             in
-            case m.playlist of
-                Nothing ->
-                    Debug.log "playlist empty"
-                        ( m, Cmd.none )
-
-                Just play ->
-                    ( m, tracksRequest model.access_token play.tracksHref )
+            let
+                cmd =
+                    Random.generate RandomInt (Random.int 0 (List.length playlist_response - 1))
+            in
+            ( m, cmd )
 
         PlaylistRequest (Err e) ->
             case e of
@@ -363,10 +412,20 @@ update msg model =
                     ( model, Common.storePlaylist p.name url model.token )
 
         PlaylistStoreRequest _ ->
-            ( model, Cmd.none )
+            ( { model | errMsg = "Success!" }, Cmd.none )
 
         RestorePlaylist ->
             ( { model | divvis = { visible1 = True, visible2 = False }, playlist = Nothing, tracks = Nothing, genre = "Rock", mood = 5 }, Cmd.none )
+
+        LogoutSubmit ->
+            let
+                cmd =
+                    Cmd.batch [ removeItem (), logout (), Nav.pushUrl model.key "/" ]
+            in
+            ( { model | user = Nothing, token = "" }, cmd )
+
+        LogoutRequest _ ->
+            ( model, Cmd.none )
 
 
 

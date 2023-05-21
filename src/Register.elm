@@ -1,7 +1,7 @@
 module Register exposing (..)
 
 import Html exposing (Html, button, div, form, h1, input, source, text, video)
-import Html.Attributes exposing (action, autocomplete, autoplay, class, id, loop, name, placeholder, src, type_)
+import Html.Attributes exposing (action, autocomplete, autoplay, class, id, loop, name, placeholder, src, style, type_)
 import Html.Events exposing (onInput, onSubmit)
 import Http
 import Json.Decode
@@ -21,10 +21,17 @@ register : Model -> Html Msg
 register model =
     div [ class "login" ]
         [ video [ autoplay True, loop True, id "bg-video" ] [ source [ src "/assets/waves.mp4", type_ "video/mp4" ] [] ]
-        , form [ class "form", action "javascript:void(0);", onSubmit LoginSubmit, autocomplete False ]
+        , form [ class "form", action "javascript:void(0);", onSubmit RegisterSubmit, autocomplete False ]
             [ div [ class "control" ]
                 [ h1 [] [ text "Register" ]
                 ]
+            , if model.errMsg /= "" then
+                div [ style "margin-bottom" "25px", style "color" "red" ]
+                    [ text model.errMsg
+                    ]
+
+              else
+                div [] []
             , div [ class "control block-cube block-input" ]
                 [ input
                     [ name "email"

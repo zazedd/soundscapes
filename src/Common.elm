@@ -9,6 +9,31 @@ import Types exposing (..)
 import VitePluginHelper
 
 
+nth : List a -> Int -> Maybe a
+nth xs n =
+    case xs of
+        [] ->
+            Nothing
+
+        x :: ys ->
+            case n of
+                0 ->
+                    Just x
+
+                _ ->
+                    nth ys (n - 1)
+
+
+
+-- ( ! ) : List a -> Int -> Maybe a
+-- (!):List a ->Int-> Maybe a
+-- xs ! n = case xs of
+--   [] -> nothing
+--   (x :: xs) -> case n of
+--     0 -> Just x
+--     _ -> xs ! (n - 1)
+
+
 storePlaylist : String -> String -> String -> Cmd Msg
 storePlaylist name url token =
     Http.request
@@ -51,7 +76,7 @@ user_login model =
                         [ span [ class "material-symbols-outlined", style "font-size" "17px" ]
                             [ text "arrow_forward_ios" ]
                         ]
-                    , a [ href "/logout" ] [ span [ class "sidebar-option-text" ] [ span [ id "sidebar-option-text2" ] [ text (nbsp ++ nbsp ++ nbsp ++ nbsp ++ nbsp ++ nbsp ++ "Log Out") ] ] ]
+                    , a [ href "#", onClick LogoutSubmit ] [ span [ class "sidebar-option-text" ] [ span [ id "sidebar-option-text2" ] [ text (nbsp ++ nbsp ++ nbsp ++ nbsp ++ nbsp ++ nbsp ++ "Log Out") ] ] ]
                     ]
                 ]
 
@@ -84,6 +109,7 @@ sidebar model =
                     , span [ id "sidebar-option-text2" ] [ text "mood based" ]
                     ]
                 ]
+
             -- , a [ href "#" ]
             --     [ span [ class "material-symbols-outlined" ]
             --         [ text "music_note" ]
@@ -162,35 +188,43 @@ playlistShow model =
                 Just pl ->
                     div [ id "playlist-header" ]
                         [ Html.a [ id "playlist-name", href ("https://open.spotify.com/playlist/" ++ pl.id) ] [ text (limitText 60 pl.name) ]
-                          , div [ class "buttons" ]
-                                [ div [ class "button" ] [
-                                  case model.user of
+                        , div [ class "buttons" ]
+                            [ div [ class "button" ]
+                                [ case model.user of
                                     Just _ ->
-                                             button [ type_ "submit", onClick PlaylistStoreSubmit, class "btn block-cube block-cube-hover", id "b" ]
-                                                [ div [ class "bg-top" ]
-                                                    [ div [ class "bg-inner" ] [] ]
-                                                , div [ class "bg-right" ]
-                                                    [ div [ class "bg-inner" ] [] ]
-                                                , div [ class "bg" ]
-                                                    [ div [ class "bg-inner" ] [] ]
-                                                , div [ class "text" ] [ text "Save Playlist" ]
+                                        button [ type_ "submit", onClick PlaylistStoreSubmit, class "btn block-cube block-cube-hover", id "b" ]
+                                            [ div [ class "bg-top" ]
+                                                [ div [ class "bg-inner" ] [] ]
+                                            , div [ class "bg-right" ]
+                                                [ div [ class "bg-inner" ] [] ]
+                                            , div [ class "bg" ]
+                                                [ div [ class "bg-inner" ] [] ]
+                                            , div [ class "text" ]
+                                                [ text
+                                                    (if model.errMsg == "" then
+                                                        "Save Playlist"
+
+                                                     else
+                                                        model.errMsg
+                                                    )
                                                 ]
+                                            ]
 
                                     Nothing ->
-                                         div [] [] 
+                                        div [] []
                                 ]
-                                , div [ class "button" ]
-                                    [ button [ type_ "submit", onClick RestorePlaylist, class "btn block-cube block-cube-hover", id "b" ]
-                                        [ div [ class "bg-top" ]
-                                            [ div [ class "bg-inner" ] [] ]
-                                        , div [ class "bg-right" ]
-                                            [ div [ class "bg-inner" ] [] ]
-                                        , div [ class "bg" ]
-                                            [ div [ class "bg-inner" ] [] ]
-                                        , div [ class "text" ] [ text "Go Back" ]
-                                        ]
+                            , div [ class "button" ]
+                                [ button [ type_ "submit", onClick RestorePlaylist, class "btn block-cube block-cube-hover", id "b" ]
+                                    [ div [ class "bg-top" ]
+                                        [ div [ class "bg-inner" ] [] ]
+                                    , div [ class "bg-right" ]
+                                        [ div [ class "bg-inner" ] [] ]
+                                    , div [ class "bg" ]
+                                        [ div [ class "bg-inner" ] [] ]
+                                    , div [ class "text" ] [ text "Go Back" ]
                                     ]
                                 ]
+                            ]
                         ]
 
                 Nothing ->
