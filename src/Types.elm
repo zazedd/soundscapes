@@ -7,6 +7,7 @@ import Http
 import Json.Decode
 import Json.Encode
 import Url
+import Random
 
 
 type Route
@@ -209,6 +210,7 @@ type alias Model =
     , token : String
     , mood : Int
     , genre : String
+    , randomInt : Int
     , divvis : DivVisibility
     , playlist : Maybe Playlist
     , tracks : Maybe (List Tracks)
@@ -218,7 +220,6 @@ type alias Model =
     , pdfBytes : Maybe Bytes
     , playlistsStored : List PlaylistStored
     }
-
 
 type SpotifyRequest
     = PlayListSpotifyRequest
@@ -243,6 +244,7 @@ type Msg
     | ToggleDiv
     | MoodUpdate Int
     | GenreUpdate String
+    | RandomInt Int
     | PlaylistSubmit
     | PlaylistRequest (Result Http.Error Playlist)
     | RefreshTokenRequest ( SpotifyRequest, Result Http.Error SpotifyAuth )

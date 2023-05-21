@@ -43,7 +43,7 @@ playlists =
                   td [ class "table-dark" ]
                     [ text playlist.name ]
                 , td [ class "table-dark" ]
-                    [ a [ href playlist.url ] [ text "Link" ]
+                    [ a [ href ("https://open.spotify.com/playlist/" ++ playlist.id) ] [ text "Link" ]
                     ]
 
                 -- , th [ class "table-dark" ]

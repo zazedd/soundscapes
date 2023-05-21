@@ -4,6 +4,7 @@ import Html exposing (..)
 import Http
 import Json.Decode as Json
 import Types exposing (..)
+import Random
 
 
 moodSwitch : Int -> String
@@ -28,8 +29,8 @@ moodSwitch mood =
             ""
 
 
-playlistRequest : String -> Int -> String -> Cmd Msg
-playlistRequest access_token mood genre =
+playlistRequest : Model -> String -> Int -> String -> Cmd Msg
+playlistRequest model access_token mood genre =
     Http.request
         { method = "GET"
         , headers =
@@ -40,15 +41,15 @@ playlistRequest access_token mood genre =
             ]
         , url = "https://api.spotify.com/v1/search?q=" ++ (mood |> moodSwitch) ++ ("+" ++ genre) ++ "&type=playlist&market=PT&limit=30"
         , body = Http.emptyBody
-        , expect = Http.expectJson PlaylistRequest playlistDecoder
+        , expect = Http.expectJson PlaylistRequest (playlistDecoder model)
         , timeout = Nothing
         , tracker = Nothing
         }
 
 
-playlistDecoder : Json.Decoder Playlist
-playlistDecoder =
-    Json.at [ "playlists", "items", "0" ]
+playlistDecoder : Model -> Json.Decoder Playlist
+playlistDecoder model =
+    Json.at [ "playlists", "items", (model.randomInt |> String.fromInt) ]
         (Json.map5 Playlist
             (Json.field "name" Json.string)
             (Json.field "id" Json.string)

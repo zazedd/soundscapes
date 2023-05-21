@@ -16,6 +16,7 @@ import Register exposing (submitRegister)
 import Types exposing (..)
 import Url exposing (Protocol(..))
 import Url.Parser exposing (s, top)
+import Random exposing (..)
 
 
 type alias Flags =
@@ -58,6 +59,7 @@ init flags url key =
       , token = flags.token
       , mood = 5
       , genre = "Rock"
+      , randomInt = 0
       , divvis = visibleController ()
       , playlist = Nothing
       , tracks = Nothing
@@ -215,7 +217,7 @@ update msg model =
             ( model, Cmd.none )
 
         ToggleDiv ->
-            ( { model | divvis = { visible1 = not model.divvis.visible1, visible2 = not model.divvis.visible2 } }, Cmd.none )
+            ( { model | divvis = { visible1 = not model.divvis.visible1, visible2 = not model.divvis.visible2 } }, Random.generate RandomInt (Random.int 1 30))
 
         MoodUpdate m ->
             ( { model
@@ -231,8 +233,11 @@ update msg model =
             , Cmd.none
             )
 
+        RandomInt x ->
+            ( { model | randomInt = x }, Cmd.none ) 
+
         PlaylistSubmit ->
-            ( model, playlistRequest model.access_token model.mood model.genre )
+            ( model, playlistRequest model model.access_token model.mood model.genre )
 
         PlaylistRequest (Ok playlist_response) ->
             let
@@ -273,7 +278,7 @@ update msg model =
             in
             case repeat of
                 PlayListSpotifyRequest ->
-                    ( m, playlistRequest model.access_token model.mood model.genre )
+                    ( m, playlistRequest model model.access_token model.mood model.genre )
 
                 TracksSpotifyRequest ->
                     case model.playlist of
