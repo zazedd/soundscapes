@@ -320,6 +320,7 @@ table {
 .buttons .button {
   margin-right: 10px;
   margin-left: 20px;
+  font-family: "Unbounded";
 }
 
 #playlist-name {

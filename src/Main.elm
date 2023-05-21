@@ -352,7 +352,7 @@ update msg model =
             ( model, Cmd.none )
 
         RestorePlaylist ->
-            ( { model | divvis = { visible1 = True, visible2 = False }, playlist = Nothing, tracks = Nothing }, Cmd.none )
+            ( { model | divvis = { visible1 = True, visible2 = False }, playlist = Nothing, tracks = Nothing, genre = "Rock", mood = 5 }, Cmd.none )
 
 
 
