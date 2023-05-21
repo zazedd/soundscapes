@@ -75,7 +75,7 @@ sidebar model =
             ]
         , hr [ class "divider" ] []
         , div [ class "sidebar-options" ]
-            [ a [ href "/" ]
+            [ a [ href "/", onClick RestorePlaylist ]
                 [ span [ class "material-symbols-outlined" ] [ text "emoticon" ]
                 , span [ class "sidebar-option-text" ]
                     [ text (nbsp ++ nbsp ++ nbsp)
@@ -94,7 +94,7 @@ sidebar model =
             --         , span [ id "sidebar-option-text2" ] [ text "song based" ]
             --         ]
             --     ]
-            , a [ href "/name" ]
+            , a [ href "/name", onClick RestorePlaylist ]
                 [ span [ class "material-symbols-outlined" ]
                     [ text "search" ]
                 , span [ class "sidebar-option-text" ]
