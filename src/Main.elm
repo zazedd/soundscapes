@@ -12,11 +12,11 @@ import Mood exposing (mood)
 import Pdf exposing (genPdf)
 import Platform.Cmd as Cmd
 import PlaylistApi exposing (..)
+import Random exposing (..)
 import Register exposing (submitRegister)
 import Types exposing (..)
 import Url exposing (Protocol(..))
 import Url.Parser exposing (s, top)
-import Random exposing (..)
 
 
 type alias Flags =
@@ -217,7 +217,7 @@ update msg model =
             ( model, Cmd.none )
 
         ToggleDiv ->
-            ( { model | divvis = { visible1 = not model.divvis.visible1, visible2 = not model.divvis.visible2 } }, Random.generate RandomInt (Random.int 1 30))
+            ( { model | divvis = { visible1 = not model.divvis.visible1, visible2 = not model.divvis.visible2 } }, Random.generate RandomInt (Random.int 1 30) )
 
         MoodUpdate m ->
             ( { model
@@ -234,7 +234,7 @@ update msg model =
             )
 
         RandomInt x ->
-            ( { model | randomInt = x }, Cmd.none ) 
+            ( { model | randomInt = x }, Cmd.none )
 
         PlaylistSubmit ->
             ( model, playlistRequest model model.access_token model.mood model.genre )

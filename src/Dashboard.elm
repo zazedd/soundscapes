@@ -56,44 +56,45 @@ playlists =
 
 dashboard : Model -> Html Msg
 dashboard model =
-  div [] [
-    sidebar model
-    , div [ class "dashboard-content" ] (
-        case model.user of 
-          Nothing -> [
-            div [ class "center-content" ] [ text "Please login first!" ] ]
-
-          Just _ -> [
-            p [ id "admintitle" ]
-                [ text "Dashboard" ]
-            , div
-                [ class "admin-content" ]
-                [ div
-                    [ style "display" "flex"
-                    , style "justify-content" "center"
-                    , style "align-items"
-                        "center"
-                    , style
-                        "width"
-                        "100%"
-                    , style "margin" "15px"
+    div []
+        [ sidebar model
+        , div [ class "dashboard-content" ]
+            (case model.user of
+                Nothing ->
+                    [ div [ class "center-content" ] [ text "Please login first!" ]
                     ]
-                    [ p [ style "margin" "0" ] [ text "These are your playlists" ]
-                    ]
-                , table [ class "table" ]
-                    [ thead [ style "margin-bottom" "100px" ]
-                        [ tr []
-                            [ -- th [ class "table-dark" ] [ text "Id" ]
-                              th [ class "table-dark" ] [ text "Name" ]
-                            , th [ class "table-dark" ] [ text "Url" ]
 
-                            -- , th [ class "table-dark" ] [ text "User Id" ]
-                            , th [ class "table-dark" ] [ text "Delete" ]
+                Just _ ->
+                    [ p [ id "admintitle" ]
+                        [ text "Dashboard" ]
+                    , div
+                        [ class "admin-content" ]
+                        [ div
+                            [ style "display" "flex"
+                            , style "justify-content" "center"
+                            , style "align-items"
+                                "center"
+                            , style
+                                "width"
+                                "100%"
+                            , style "margin" "15px"
+                            ]
+                            [ p [ style "margin" "0" ] [ text "These are your playlists" ]
+                            ]
+                        , table [ class "table" ]
+                            [ thead [ style "margin-bottom" "100px" ]
+                                [ tr []
+                                    [ -- th [ class "table-dark" ] [ text "Id" ]
+                                      th [ class "table-dark" ] [ text "Name" ]
+                                    , th [ class "table-dark" ] [ text "Url" ]
+
+                                    -- , th [ class "table-dark" ] [ text "User Id" ]
+                                    , th [ class "table-dark" ] [ text "Delete" ]
+                                    ]
+                                ]
+                            , tbody [] (playlists model.playlistsStored)
                             ]
                         ]
-                    , tbody [] (playlists model.playlistsStored)
                     ]
-                ]
-                ])
-                ]
-    
+            )
+        ]

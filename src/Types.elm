@@ -6,8 +6,8 @@ import Bytes exposing (Bytes)
 import Http
 import Json.Decode
 import Json.Encode
-import Url
 import Random
+import Url
 
 
 type Route
@@ -220,6 +220,7 @@ type alias Model =
     , pdfBytes : Maybe Bytes
     , playlistsStored : List PlaylistStored
     }
+
 
 type SpotifyRequest
     = PlayListSpotifyRequest

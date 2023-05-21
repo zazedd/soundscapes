@@ -3,8 +3,8 @@ module PlaylistApi exposing (..)
 import Html exposing (..)
 import Http
 import Json.Decode as Json
-import Types exposing (..)
 import Random
+import Types exposing (..)
 
 
 moodSwitch : Int -> String
@@ -49,7 +49,7 @@ playlistRequest model access_token mood genre =
 
 playlistDecoder : Model -> Json.Decoder Playlist
 playlistDecoder model =
-    Json.at [ "playlists", "items", (model.randomInt |> String.fromInt) ]
+    Json.at [ "playlists", "items", model.randomInt |> String.fromInt ]
         (Json.map5 Playlist
             (Json.field "name" Json.string)
             (Json.field "id" Json.string)
