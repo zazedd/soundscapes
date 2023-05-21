@@ -351,6 +351,9 @@ update msg model =
         PlaylistStoreRequest _ ->
             ( model, Cmd.none )
 
+        RestorePlaylist ->
+            ( { model | divvis = { visible1 = True, visible2 = False }, playlist = Nothing, tracks = Nothing }, Cmd.none )
+
 
 
 -- ( model, refreshTokenRequest TracksSpotifyRequest model.client_id model.client_secret )

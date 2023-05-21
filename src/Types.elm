@@ -254,4 +254,5 @@ type Msg
     | DeletePlaylist String
     | PlaylistStoreSubmit
     | PlaylistStoreRequest (Result Http.Error ())
+    | RestorePlaylist
     | DownloadPdf
