@@ -29,7 +29,11 @@ const r = localStorage.getItem("auth");
     node: root,
     flags: { token: r ? r : "", user: await user(r) },
   });
-  app.ports.setStorage.subscribe(function (state) {
+  app.ports.setStorage.subscribe(function(state) {
     localStorage.setItem("auth", state);
+  });
+
+  app.ports.removeItem.subscribe(function() {
+    localStorage.removeItem("auth");
   });
 })();
