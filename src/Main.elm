@@ -123,6 +123,9 @@ update msg model =
                         AdminRoute ->
                             ( { model | url = url, route = r }, Cmd.batch [ cmd, Admin.getUsers model.token ] )
 
+                        DashboardRoute ->
+                            ( { model | url = url, route = r }, Cmd.batch [ cmd, Dashboard.get_playlists model.token ] )
+
                         _ ->
                             ( { model | url = url, route = r }, cmd )
 
@@ -327,6 +330,21 @@ update msg model =
 
         DeletePlaylist id ->
             ( model, Dashboard.delete_playlist id model.token )
+
+        PlaylistStoreSubmit ->
+            case model.playlist of
+                Nothing ->
+                    ( model, Cmd.none )
+
+                Just p ->
+                    let
+                        url =
+                            "https://open.spotify.com/track/" ++ p.id
+                    in
+                    ( model, Mood.storePlaylist p.name url model.token )
+
+        PlaylistStoreRequest _ ->
+            ( model, Cmd.none )
 
 
 

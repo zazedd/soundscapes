@@ -250,4 +250,6 @@ type Msg
     | PlaylistStoredRequest (Result Http.Error (List PlaylistStored))
     | PlaylistStoredRequestDelete ( String, Result Http.Error () )
     | DeletePlaylist String
+    | PlaylistStoreSubmit
+    | PlaylistStoreRequest (Result Http.Error ())
     | DownloadPdf
