@@ -1,6 +1,8 @@
 # Soundscapes
 
 [![ci](https://github.com/lindsaykwardell/vite-elm-template/actions/workflows/ci.yml/badge.svg)](https://github.com/lindsaykwardell/vite-elm-template/actions/workflows/ci.yml)
+
+Backend is here: [backend-soundscapes](https://github.com/ProgramingIsTheFuture/soundscapes-backend)
 ## Features
 
 - [Hot Module Reload](https://github.com/hmsk/vite-plugin-elm) of all code in the app (including Elm)
