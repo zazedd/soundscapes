@@ -43,7 +43,7 @@ playlists =
                   td [ class "table-dark" ]
                     [ text playlist.name ]
                 , td [ class "table-dark" ]
-                    [ a [ href ("https://open.spotify.com/playlist/" ++ playlist.id) ] [ text "Link" ]
+                    [ a [ href playlist.url ] [ text "Link" ]
                     ]
 
                 -- , th [ class "table-dark" ]
@@ -64,12 +64,13 @@ dashboard model =
                     [ div [ class "center-content" ] [ text "Please login first!" ]
                     ]
 
-                Just _ ->
+                Just u ->
                     [ p [ id "admintitle" ]
                         [ text "Dashboard" ]
                     , div
                         [ class "admin-content" ]
-                        [ div
+                        [ div [] [ p [ style "margin" "0" ] [ text ("Hi " ++ u.username ++ "!") ] ]
+                        , div
                             [ style "display" "flex"
                             , style "justify-content" "center"
                             , style "align-items"

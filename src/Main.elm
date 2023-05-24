@@ -407,7 +407,7 @@ update msg model =
                 Just p ->
                     let
                         url =
-                            "https://open.spotify.com/track/" ++ p.id
+                            "https://open.spotify.com/playlist/" ++ p.id
                     in
                     ( model, Common.storePlaylist p.name url model.token )
 
@@ -415,7 +415,7 @@ update msg model =
             ( { model | errMsg = "Success!" }, Cmd.none )
 
         RestorePlaylist ->
-            ( { model | divvis = { visible1 = True, visible2 = False }, playlist = Nothing, tracks = Nothing, genre = "Rock", mood = 5 }, Cmd.none )
+            ( { model | divvis = { visible1 = True, visible2 = False }, playlist = Nothing, errMsg = "", tracks = Nothing, genre = "Rock", mood = 5 }, Cmd.none )
 
         LogoutSubmit ->
             let
