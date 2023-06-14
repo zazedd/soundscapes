@@ -17,3 +17,7 @@ cd soundscapes
 npm install
 npm run dev
 ```
+
+### Screenshots:  
+![1](.github/sc1.png "Main Page")
+![2](.github/sc2.png "Playlist")
